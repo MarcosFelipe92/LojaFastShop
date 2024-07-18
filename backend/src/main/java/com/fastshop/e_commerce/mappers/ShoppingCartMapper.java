@@ -17,7 +17,7 @@ public class ShoppingCartMapper {
 
         entity.setAccount(account);
         entity.setItems(dto.getItems().stream()
-                .map(ItemCartMapper::dtoToEntity)
+                .map(item -> ItemCartMapper.dtoToEntity(item, entity))
                 .collect(Collectors.toList()));
 
         return entity;
@@ -27,7 +27,7 @@ public class ShoppingCartMapper {
         entity.setId(dto.getId());
         entity.setAccount(account);
         entity.setItems(dto.getItems().stream()
-                .map(ItemCartMapper::dtoToEntity)
+                .map(item -> ItemCartMapper.dtoToEntity(item, entity))
                 .collect(Collectors.toList()));
 
     }

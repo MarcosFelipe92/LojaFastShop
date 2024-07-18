@@ -14,13 +14,13 @@ public class ItemCartDTO {
     private String name;
     private String description;
     private Double price;
-    private ShoppingCartDTO cart;
+    private Long shoppingCartId;
 
     public ItemCartDTO(ItemCartBO entity) {
         this.id = entity.getId();
         this.name = entity.getName();
         this.description = entity.getDescription();
         this.price = entity.getPrice();
-        this.cart = new ShoppingCartDTO(entity.getShoppingCart());
+        this.shoppingCartId = entity.getShoppingCart().getId();
     }
 }

@@ -1,6 +1,9 @@
 package com.fastshop.e_commerce.mappers;
 
-import com.fastshop.e_commerce.dtos.UserDTO;
+import java.util.stream.Collectors;
+
+import com.fastshop.e_commerce.dtos.user.UserDTO;
+import com.fastshop.e_commerce.models.AccountBO;
 import com.fastshop.e_commerce.models.UserBO;
 
 import lombok.NoArgsConstructor;
@@ -13,13 +16,22 @@ public class UserMapper {
         entity.setEmail(dto.getEmail());
         entity.setPassword(dto.getPassword());
 
+        entity.setPhones(dto.getPhones().stream()
+                .map(item -> PhoneMapper.dtoToEntity(item, entity))
+                .collect(Collectors.toList()));
+
         return entity;
     }
 
-    public static void copyAttributes(UserDTO dto, UserBO entity) {
+    public static void copyAttributes(UserDTO dto, UserBO entity, AccountBO account) {
         entity.setName(dto.getName());
         entity.setEmail(dto.getEmail());
         entity.setPassword(dto.getPassword());
+        entity.setAccount(account);
+
+        entity.setPhones(dto.getPhones().stream()
+                .map(item -> PhoneMapper.dtoToEntity(item, entity))
+                .collect(Collectors.toList()));
 
     }
 }

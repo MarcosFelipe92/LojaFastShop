@@ -1,4 +1,4 @@
-package com.fastshop.e_commerce.dtos;
+package com.fastshop.e_commerce.dtos.user;
 
 import com.fastshop.e_commerce.models.UserBO;
 
@@ -9,19 +9,16 @@ import lombok.NoArgsConstructor;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-public class UserDTO {
+public class UserSummaryDTO {
     private Long id;
     private String name;
     private String email;
     private String password;
 
-    private AccountDTO account;
-
-    public UserDTO(UserBO entity) {
+    public UserSummaryDTO(UserBO entity) {
         this.id = entity.getId();
         this.name = entity.getName();
         this.email = entity.getEmail();
         this.password = entity.getPassword();
-        this.account = new AccountDTO(entity.getAccount());
     }
 }

@@ -12,7 +12,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.fastshop.e_commerce.dtos.UserDTO;
+import com.fastshop.e_commerce.dtos.user.UserDTO;
+import com.fastshop.e_commerce.dtos.user.UserSummaryDTO;
 import com.fastshop.e_commerce.services.UserService;
 
 @RestController
@@ -22,9 +23,15 @@ public class UserController {
     private UserService service;
 
     @GetMapping()
-    public ResponseEntity<List<UserDTO>> findAll() {
-        List<UserDTO> list = service.findAll();
+    public ResponseEntity<List<UserSummaryDTO>> findAll() {
+        List<UserSummaryDTO> list = service.findAll();
         return ResponseEntity.ok().body(list);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<UserDTO> findById(@PathVariable Long id) {
+        UserDTO entity = service.findById(id);
+        return ResponseEntity.ok().body(entity);
     }
 
     @PostMapping("/register")

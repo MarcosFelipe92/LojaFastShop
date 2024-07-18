@@ -1,5 +1,7 @@
 package com.fastshop.e_commerce.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -11,18 +13,24 @@ import lombok.Data;
 
 @Data
 @Entity
-@Table(name = "item_carts")
-public class ItemCartBO {
+@Table(name = "addresses")
+public class AddressBO {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String name;
-    private String description;
-    private Double price;
+    private String zipCode;
+    private String street;
+    private String number;
+    private String complement;
+    private String neighborhood;
+    private String city;
+    private String state;
+    private String country;
 
+    @JsonIgnore
     @ManyToOne
-    @JoinColumn(name = "shopping_cart_id")
-    private ShoppingCartBO shoppingCart;
+    @JoinColumn(name = "account_id")
+    private AccountBO account;
 }
