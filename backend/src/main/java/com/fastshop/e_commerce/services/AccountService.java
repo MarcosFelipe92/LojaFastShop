@@ -19,7 +19,6 @@ import com.fastshop.e_commerce.models.RoleBO;
 import com.fastshop.e_commerce.models.UserBO;
 import com.fastshop.e_commerce.repositories.AccountRepository;
 
-import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 
@@ -51,21 +50,20 @@ public class AccountService {
 
     @Transactional
     public void addAddressToAccount(Long accountId, AddressDTO addressDTO, JwtAuthenticationToken token) {
-        UserDTO user = userService.findById(Long.parseLong(token.getName()));
+        UserBO user = UserMapper.dtoToEntity(userService.findById(Long.parseLong(token.getName())));
+        boolean isAdmin = user.hasRole(RoleBO.Values.ADMIN.name());
 
         AccountBO account = repository.findById(accountId)
                 .orElseThrow(() -> new NotFoundException("Account not found"));
 
-        if (!account.getUser().getId().equals(user.getId())) {
+        if (isAdmin || account.getUser().getId().equals(user.getId())) {
+            AddressBO address = AddressMapper.dtoToEntity(addressDTO, account);
+            account.getAddresses().add(address);
+            repository.save(account);
+        } else {
             throw new AccessDeniedException(
                     "You are not allowed to add an address to an account that does not belong to you.");
         }
-
-        AddressBO address = AddressMapper.dtoToEntity(addressDTO, account);
-
-        account.getAddresses().add(address);
-
-        repository.save(account);
     }
 
     @Transactional

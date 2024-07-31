@@ -6,7 +6,10 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.stereotype.Service;
 
 import com.fastshop.e_commerce.dtos.user.UserDTO;
@@ -72,17 +75,20 @@ public class UserService {
     }
 
     @Transactional
-    public UserDTO update(UserDTO dto, Long id) {
-        try {
-            UserBO user = repository.findById(id).orElseThrow(() -> new NotFoundException("Entity not found"));
+    public UserDTO update(UserDTO dto, Long id, JwtAuthenticationToken token) {
+        UserBO requestUser = repository.findById(Long.parseLong(token.getName())).get();
+        UserBO userUpdated = repository.findById(id).orElseThrow(() -> new NotFoundException("Entity not found"));
+        boolean isAdmin = requestUser.hasRole(RoleBO.Values.ADMIN.name());
 
-            AccountBO account = user.getAccount();
+        if (isAdmin || requestUser.getId().equals(userUpdated.getId())) {
+            AccountBO account = userUpdated.getAccount();
 
-            UserMapper.copyAttributes(dto, user, account);
-            user = repository.save(user);
-            return new UserDTO(user);
-        } catch (EntityNotFoundException e) {
-            throw new NotFoundException("id " + id + " not found");
+            UserMapper.copyAttributes(dto, userUpdated, account);
+            userUpdated = repository.save(userUpdated);
+            return new UserDTO(userUpdated);
+        } else {
+            throw new AccessDeniedException(
+                    "You are not allowed to modify to an user that does not you.");
         }
     }
 

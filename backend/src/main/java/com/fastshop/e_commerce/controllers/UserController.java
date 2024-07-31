@@ -4,6 +4,8 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -22,7 +24,8 @@ public class UserController {
     @Autowired
     private UserService service;
 
-    @GetMapping()
+    @PreAuthorize("hasAuthority('SCOPE_ADMIN')")
+    @GetMapping
     public ResponseEntity<List<UserSummaryDTO>> findAll() {
         List<UserSummaryDTO> list = service.findAll();
         return ResponseEntity.ok().body(list);
@@ -41,8 +44,9 @@ public class UserController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<UserDTO> update(@RequestBody UserDTO dto, @PathVariable Long id) {
-        UserDTO obj = service.update(dto, id);
+    public ResponseEntity<UserDTO> update(@RequestBody UserDTO dto, @PathVariable Long id,
+            JwtAuthenticationToken token) {
+        UserDTO obj = service.update(dto, id, token);
         return ResponseEntity.ok().body(obj);
     }
 

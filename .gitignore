@@ -5,9 +5,7 @@ target/
 !**/src/test/**/target/
 
 # Ignorar app.key e app.pub no diretório src/main/resources
-**/src/main/resources/app.key
-**/src/main/resources/app.pub
-
+**/src/main/resources/auth
 
 ### STS ###
 .apt_generated

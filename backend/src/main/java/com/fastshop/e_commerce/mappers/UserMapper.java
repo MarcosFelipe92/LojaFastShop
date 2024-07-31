@@ -1,9 +1,11 @@
 package com.fastshop.e_commerce.mappers;
 
+import java.util.List;
 import java.util.stream.Collectors;
 
 import com.fastshop.e_commerce.dtos.user.UserDTO;
 import com.fastshop.e_commerce.models.AccountBO;
+import com.fastshop.e_commerce.models.PhoneBO;
 import com.fastshop.e_commerce.models.UserBO;
 
 import lombok.NoArgsConstructor;
@@ -33,9 +35,12 @@ public class UserMapper {
         entity.setPassword(dto.getPassword());
         entity.setAccount(account);
 
-        entity.setPhones(dto.getPhones().stream()
+        List<PhoneBO> updatedPhones = dto.getPhones().stream()
                 .map(item -> PhoneMapper.dtoToEntity(item, entity))
-                .collect(Collectors.toList()));
+                .collect(Collectors.toList());
+
+        entity.getPhones().clear();
+        entity.getPhones().addAll(updatedPhones);
 
     }
 }
