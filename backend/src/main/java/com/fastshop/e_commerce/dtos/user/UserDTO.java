@@ -1,11 +1,15 @@
 package com.fastshop.e_commerce.dtos.user;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import com.fastshop.e_commerce.dtos.account.AccountDTO;
 import com.fastshop.e_commerce.dtos.phone.PhoneDTO;
+import com.fastshop.e_commerce.dtos.role.RoleDTO;
 import com.fastshop.e_commerce.models.PhoneBO;
+import com.fastshop.e_commerce.models.RoleBO;
 import com.fastshop.e_commerce.models.UserBO;
 
 import lombok.AllArgsConstructor;
@@ -23,6 +27,7 @@ public class UserDTO {
 
     private AccountDTO account;
     private List<PhoneDTO> phones = new ArrayList<>();
+    private Set<RoleDTO> roles = new HashSet<>();
 
     public UserDTO(UserBO entity) {
         this.id = entity.getId();
@@ -32,8 +37,9 @@ public class UserDTO {
         this.account = new AccountDTO(entity.getAccount());
     }
 
-    public UserDTO(UserBO entity, List<PhoneBO> phones) {
+    public UserDTO(UserBO entity, List<PhoneBO> phones, Set<RoleBO> roles) {
         this(entity);
         phones.forEach(i -> this.phones.add(new PhoneDTO(i)));
+        roles.forEach(i -> this.roles.add(new RoleDTO(i)));
     }
 }

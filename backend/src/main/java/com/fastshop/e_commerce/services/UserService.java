@@ -39,7 +39,7 @@ public class UserService {
 
     public UserDTO findById(Long id) {
         UserBO entity = repository.findById(id).orElseThrow(() -> new NotFoundException("User not found"));
-        return new UserDTO(entity, entity.getPhones());
+        return new UserDTO(entity, entity.getPhones(), entity.getRoles());
     }
 
     public Optional<UserBO> findByEmail(String email) {
@@ -49,7 +49,10 @@ public class UserService {
 
     @Transactional
     public UserDTO register(UserDTO dto) {
-        repository.findByEmail(dto.getEmail()).ifPresent(user -> new InvalidEmailException("Email already registered"));
+        repository.findByEmail(dto.getEmail()).ifPresent(user -> {
+            throw new InvalidEmailException("Email already registered");
+        });
+
         RoleBO basicRole = roleService.findByName(RoleBO.Values.BASIC.name());
 
         UserBO user = UserMapper.dtoToEntity(dto);
@@ -65,7 +68,7 @@ public class UserService {
         account.setUser(user);
 
         user = repository.save(user);
-        return new UserDTO(user, user.getPhones());
+        return new UserDTO(user, user.getPhones(), user.getRoles());
     }
 
     @Transactional

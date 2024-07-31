@@ -20,6 +20,10 @@ public class UserMapper {
                 .map(item -> PhoneMapper.dtoToEntity(item, entity))
                 .collect(Collectors.toList()));
 
+        entity.setRoles(dto.getRoles().stream()
+                .map(item -> RoleMapper.dtoToEntity(item))
+                .collect(Collectors.toSet()));
+
         return entity;
     }
 

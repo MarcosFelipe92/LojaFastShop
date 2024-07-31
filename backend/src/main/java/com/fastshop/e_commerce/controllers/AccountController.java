@@ -4,6 +4,8 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -33,11 +35,18 @@ public class AccountController {
         return ResponseEntity.ok().body(entity);
     }
 
-    @PostMapping("/{id}")
-    public ResponseEntity<List<AddressDTO>> addAddressToAccount(@PathVariable Long id,
-            @RequestBody AddressDTO addressDto) {
-        List<AddressDTO> list = service.addAddressToAccount(id, addressDto);
-        return ResponseEntity.ok().body(list);
+    @PostMapping("/{id}/address")
+    public ResponseEntity<String> addAddressToAccount(@PathVariable Long id,
+            @RequestBody AddressDTO addressDto, JwtAuthenticationToken token) {
+        service.addAddressToAccount(id, addressDto, token);
+        return ResponseEntity.status(201).body("Address added successfully");
+    }
+
+    @DeleteMapping("/{id}/address/{addressId}")
+    public ResponseEntity<String> removeAddressToAccount(@PathVariable Long id,
+            @PathVariable Long addressId, JwtAuthenticationToken token) {
+        service.removeAddressToAccount(id, addressId, token);
+        return ResponseEntity.ok().body("Address added successfully");
     }
 
     // @PutMapping("/{id}")

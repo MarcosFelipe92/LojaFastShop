@@ -38,4 +38,13 @@ public class AddressService {
         entity = repository.save(entity);
         return new AddressDTO(entity);
     }
+
+    @Transactional
+    public void delete(Long id) {
+        repository.findById(id).orElseThrow(() -> {
+            throw new NotFoundException("Address not found");
+        });
+
+        repository.deleteById(id);
+    }
 }
