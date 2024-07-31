@@ -1,8 +1,9 @@
-package com.fastshop.e_commerce.dtos;
+package com.fastshop.e_commerce.dtos.shoppingCart;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import com.fastshop.e_commerce.dtos.itemCart.ItemCartDTO;
 import com.fastshop.e_commerce.models.ItemCartBO;
 import com.fastshop.e_commerce.models.ShoppingCartBO;
 

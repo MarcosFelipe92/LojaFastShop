@@ -6,8 +6,8 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.fastshop.e_commerce.dtos.AddressDTO;
-import com.fastshop.e_commerce.exceptions.service.ResourceNotFoundException;
+import com.fastshop.e_commerce.dtos.address.AddressDTO;
+import com.fastshop.e_commerce.exceptions.common.NotFoundException;
 import com.fastshop.e_commerce.mappers.AddressMapper;
 import com.fastshop.e_commerce.models.AccountBO;
 import com.fastshop.e_commerce.models.AddressBO;
@@ -26,7 +26,7 @@ public class AddressService {
 
     @Transactional
     public AddressDTO findById(Long id) {
-        AddressBO entity = repository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Entity not found"));
+        AddressBO entity = repository.findById(id).orElseThrow(() -> new NotFoundException("Address not found"));
         return new AddressDTO(entity);
     }
 

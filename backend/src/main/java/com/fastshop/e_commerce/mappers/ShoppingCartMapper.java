@@ -2,7 +2,7 @@ package com.fastshop.e_commerce.mappers;
 
 import java.util.stream.Collectors;
 
-import com.fastshop.e_commerce.dtos.ShoppingCartDTO;
+import com.fastshop.e_commerce.dtos.shoppingCart.ShoppingCartDTO;
 import com.fastshop.e_commerce.models.AccountBO;
 import com.fastshop.e_commerce.models.ShoppingCartBO;
 

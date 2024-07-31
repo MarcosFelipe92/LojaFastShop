@@ -1,6 +1,6 @@
 package com.fastshop.e_commerce.mappers;
 
-import com.fastshop.e_commerce.dtos.AddressDTO;
+import com.fastshop.e_commerce.dtos.address.AddressDTO;
 import com.fastshop.e_commerce.models.AccountBO;
 import com.fastshop.e_commerce.models.AddressBO;
 

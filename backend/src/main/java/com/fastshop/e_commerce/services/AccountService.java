@@ -6,10 +6,10 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.fastshop.e_commerce.dtos.AddressDTO;
 import com.fastshop.e_commerce.dtos.account.AccountDTO;
+import com.fastshop.e_commerce.dtos.address.AddressDTO;
 import com.fastshop.e_commerce.dtos.user.UserDTO;
-import com.fastshop.e_commerce.exceptions.service.ResourceNotFoundException;
+import com.fastshop.e_commerce.exceptions.common.NotFoundException;
 import com.fastshop.e_commerce.mappers.AddressMapper;
 import com.fastshop.e_commerce.models.AccountBO;
 import com.fastshop.e_commerce.models.AddressBO;
@@ -32,7 +32,7 @@ public class AccountService {
 
     @Transactional
     public AccountDTO findById(Long id) {
-        AccountBO entity = repository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Entity not found"));
+        AccountBO entity = repository.findById(id).orElseThrow(() -> new NotFoundException("Entity not found"));
         return new AccountDTO(entity, entity.getAddresses());
     }
 
@@ -47,7 +47,7 @@ public class AccountService {
     @Transactional
     public List<AddressDTO> addAddressToAccount(Long accountId, AddressDTO addressDTO) {
         AccountBO account = repository.findById(accountId)
-                .orElseThrow(() -> new ResourceNotFoundException("Account not found"));
+                .orElseThrow(() -> new NotFoundException("Account not found"));
 
         AddressDTO savedAddressDTO = addressService.insert(addressDTO, account);
         AddressBO address = AddressMapper.dtoToEntity(savedAddressDTO, account);

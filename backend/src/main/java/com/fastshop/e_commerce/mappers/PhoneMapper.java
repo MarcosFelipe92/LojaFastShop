@@ -1,6 +1,6 @@
 package com.fastshop.e_commerce.mappers;
 
-import com.fastshop.e_commerce.dtos.PhoneDTO;
+import com.fastshop.e_commerce.dtos.phone.PhoneDTO;
 import com.fastshop.e_commerce.models.PhoneBO;
 import com.fastshop.e_commerce.models.UserBO;
 

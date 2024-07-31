@@ -1,4 +1,4 @@
-package com.fastshop.e_commerce.dtos;
+package com.fastshop.e_commerce.dtos.role;
 
 import com.fastshop.e_commerce.models.RoleBO;
 

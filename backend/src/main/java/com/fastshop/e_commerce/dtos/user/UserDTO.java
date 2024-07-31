@@ -3,8 +3,8 @@ package com.fastshop.e_commerce.dtos.user;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.fastshop.e_commerce.dtos.PhoneDTO;
 import com.fastshop.e_commerce.dtos.account.AccountDTO;
+import com.fastshop.e_commerce.dtos.phone.PhoneDTO;
 import com.fastshop.e_commerce.models.PhoneBO;
 import com.fastshop.e_commerce.models.UserBO;
 

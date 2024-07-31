@@ -1,4 +1,4 @@
-package com.fastshop.e_commerce.dtos;
+package com.fastshop.e_commerce.dtos.address;
 
 import com.fastshop.e_commerce.models.AddressBO;
 

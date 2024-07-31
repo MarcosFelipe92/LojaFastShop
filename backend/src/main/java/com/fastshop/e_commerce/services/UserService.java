@@ -11,10 +11,9 @@ import org.springframework.stereotype.Service;
 
 import com.fastshop.e_commerce.dtos.user.UserDTO;
 import com.fastshop.e_commerce.dtos.user.UserSummaryDTO;
+import com.fastshop.e_commerce.exceptions.common.NotFoundException;
 import com.fastshop.e_commerce.exceptions.service.DatabaseException;
 import com.fastshop.e_commerce.exceptions.service.InvalidEmailException;
-import com.fastshop.e_commerce.exceptions.service.ResourceNotFoundException;
-import com.fastshop.e_commerce.mappers.RoleMapper;
 import com.fastshop.e_commerce.mappers.UserMapper;
 import com.fastshop.e_commerce.models.AccountBO;
 import com.fastshop.e_commerce.models.RoleBO;
@@ -39,7 +38,7 @@ public class UserService {
     }
 
     public UserDTO findById(Long id) {
-        UserBO entity = repository.findById(id).orElseThrow(() -> new ResourceNotFoundException("User not found"));
+        UserBO entity = repository.findById(id).orElseThrow(() -> new NotFoundException("User not found"));
         return new UserDTO(entity, entity.getPhones());
     }
 
@@ -72,7 +71,7 @@ public class UserService {
     @Transactional
     public UserDTO update(UserDTO dto, Long id) {
         try {
-            UserBO user = repository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Entity not found"));
+            UserBO user = repository.findById(id).orElseThrow(() -> new NotFoundException("Entity not found"));
 
             AccountBO account = user.getAccount();
 
@@ -80,7 +79,7 @@ public class UserService {
             user = repository.save(user);
             return new UserDTO(user);
         } catch (EntityNotFoundException e) {
-            throw new ResourceNotFoundException("id " + id + " not found");
+            throw new NotFoundException("id " + id + " not found");
         }
     }
 

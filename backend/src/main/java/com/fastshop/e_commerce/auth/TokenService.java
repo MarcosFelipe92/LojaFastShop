@@ -1,4 +1,4 @@
-package com.fastshop.e_commerce.services;
+package com.fastshop.e_commerce.auth;
 
 import java.time.Instant;
 import java.util.Optional;
@@ -15,6 +15,7 @@ import com.fastshop.e_commerce.dtos.login.LoginRequestDTO;
 import com.fastshop.e_commerce.dtos.login.LoginResponseDTO;
 import com.fastshop.e_commerce.models.RoleBO;
 import com.fastshop.e_commerce.models.UserBO;
+import com.fastshop.e_commerce.services.UserService;
 
 import lombok.RequiredArgsConstructor;
 
@@ -55,5 +56,4 @@ public class TokenService {
 
         return new LoginResponseDTO(jwtValue, expiresIn);
     }
-
 }

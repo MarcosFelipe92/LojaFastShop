@@ -11,8 +11,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.fastshop.e_commerce.dtos.AddressDTO;
 import com.fastshop.e_commerce.dtos.account.AccountDTO;
+import com.fastshop.e_commerce.dtos.address.AddressDTO;
 import com.fastshop.e_commerce.services.AccountService;
 
 @RestController

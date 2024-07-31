@@ -3,8 +3,8 @@ package com.fastshop.e_commerce.services;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.fastshop.e_commerce.dtos.ShoppingCartDTO;
-import com.fastshop.e_commerce.exceptions.service.ResourceNotFoundException;
+import com.fastshop.e_commerce.dtos.shoppingCart.ShoppingCartDTO;
+import com.fastshop.e_commerce.exceptions.common.NotFoundException;
 import com.fastshop.e_commerce.models.ShoppingCartBO;
 import com.fastshop.e_commerce.repositories.ShoppingCartRepository;
 
@@ -16,7 +16,7 @@ public class ShoppingCartService {
 
     public ShoppingCartDTO findById(Long id) {
         ShoppingCartBO entity = repository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Entity not found"));
+                .orElseThrow(() -> new NotFoundException("Shopping Cart not found"));
         return new ShoppingCartDTO(entity);
     }
 }

@@ -1,6 +1,6 @@
 package com.fastshop.e_commerce.mappers;
 
-import com.fastshop.e_commerce.dtos.ItemCartDTO;
+import com.fastshop.e_commerce.dtos.itemCart.ItemCartDTO;
 import com.fastshop.e_commerce.models.ItemCartBO;
 import com.fastshop.e_commerce.models.ShoppingCartBO;
 
