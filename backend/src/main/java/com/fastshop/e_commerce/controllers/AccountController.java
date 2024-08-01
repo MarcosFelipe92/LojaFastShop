@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.fastshop.e_commerce.dtos.account.AccountDTO;
+import com.fastshop.e_commerce.dtos.account.AccountSummaryDTO;
 import com.fastshop.e_commerce.dtos.address.AddressDTO;
 import com.fastshop.e_commerce.services.AccountService;
 
@@ -24,10 +25,9 @@ public class AccountController {
     @Autowired
     private AccountService service;
 
-    @PreAuthorize("hasAuthority('SCOPE_ADMIN')")
     @GetMapping
-    public ResponseEntity<List<AccountDTO>> findAll() {
-        List<AccountDTO> list = service.findAll();
+    public ResponseEntity<List<AccountSummaryDTO>> findAll() {
+        List<AccountSummaryDTO> list = service.findAll();
         return ResponseEntity.ok().body(list);
     }
 

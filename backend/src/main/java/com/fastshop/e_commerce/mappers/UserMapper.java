@@ -14,6 +14,8 @@ import lombok.NoArgsConstructor;
 public class UserMapper {
     public static UserBO dtoToEntity(UserDTO dto) {
         UserBO entity = new UserBO();
+
+        entity.setId(dto.getId());
         entity.setName(dto.getName());
         entity.setEmail(dto.getEmail());
         entity.setPassword(dto.getPassword());

@@ -32,8 +32,8 @@ public class UserController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<UserDTO> findById(@PathVariable Long id) {
-        UserDTO entity = service.findById(id);
+    public ResponseEntity<UserDTO> findById(@PathVariable Long id, JwtAuthenticationToken token) {
+        UserDTO entity = service.findById(id, token);
         return ResponseEntity.ok().body(entity);
     }
 

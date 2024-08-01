@@ -8,6 +8,7 @@ import org.springframework.security.oauth2.server.resource.authentication.JwtAut
 import org.springframework.stereotype.Service;
 
 import com.fastshop.e_commerce.dtos.account.AccountDTO;
+import com.fastshop.e_commerce.dtos.account.AccountSummaryDTO;
 import com.fastshop.e_commerce.dtos.address.AddressDTO;
 import com.fastshop.e_commerce.dtos.user.UserDTO;
 import com.fastshop.e_commerce.exceptions.common.NotFoundException;
@@ -30,8 +31,8 @@ public class AccountService {
     private final UserService userService;
     private final AddressService addressService;
 
-    public List<AccountDTO> findAll() {
-        return repository.findAll().stream().map(x -> new AccountDTO(x)).collect(Collectors.toList());
+    public List<AccountSummaryDTO> findAll() {
+        return repository.findAll().stream().map(x -> new AccountSummaryDTO(x)).collect(Collectors.toList());
     }
 
     @Transactional
@@ -50,7 +51,7 @@ public class AccountService {
 
     @Transactional
     public void addAddressToAccount(Long accountId, AddressDTO addressDTO, JwtAuthenticationToken token) {
-        UserBO user = UserMapper.dtoToEntity(userService.findById(Long.parseLong(token.getName())));
+        UserBO user = UserMapper.dtoToEntity(userService.findById(Long.parseLong(token.getName()), token));
         boolean isAdmin = user.hasRole(RoleBO.Values.ADMIN.name());
 
         AccountBO account = repository.findById(accountId)
@@ -68,13 +69,10 @@ public class AccountService {
 
     @Transactional
     public void removeAddressToAccount(Long accountId, Long addressId, JwtAuthenticationToken token) {
-        UserBO user = UserMapper.dtoToEntity(userService.findById(Long.parseLong(token.getName())));
-        boolean isAdmin = user.hasRole(RoleBO.Values.ADMIN.name());
-
         AccountBO account = repository.findById(accountId)
                 .orElseThrow(() -> new NotFoundException("Account not found"));
 
-        if (isAdmin || account.getUser().getId().equals(user.getId())) {
+        if (validateUserPermission(token, account.getUser().getId())) {
             AddressBO addressToRemove = null;
             for (AddressBO address : account.getAddresses()) {
                 if (address.getId().equals(addressId)) {
@@ -94,6 +92,21 @@ public class AccountService {
             throw new AccessDeniedException(
                     "You are not allowed to remove an address to an account that does not belong to you.");
         }
+    }
+
+    private boolean validateUserPermission(JwtAuthenticationToken token, Long dbUserId) {
+        UserDTO userRequestDTO = userService.findById(Long.parseLong(token.getName()), token);
+        UserDTO userDbDTO = userService.findById(dbUserId, token);
+
+        UserBO userRequestBO = UserMapper.dtoToEntity(userRequestDTO);
+        UserBO userFromDb = UserMapper.dtoToEntity(userDbDTO);
+
+        boolean isAdmin = userRequestBO.hasRole(RoleBO.Values.ADMIN.name());
+
+        if (isAdmin || userRequestBO.getId().equals(userFromDb.getId())) {
+            return true;
+        }
+        return false;
     }
 
     // @Transactional

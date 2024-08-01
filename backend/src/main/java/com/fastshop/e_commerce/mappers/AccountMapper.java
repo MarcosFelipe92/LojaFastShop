@@ -15,6 +15,7 @@ public class AccountMapper {
     public static AccountBO dtoToEntity(AccountDTO dto, UserBO user, ShoppingCartBO shoppingCart) {
         AccountBO entity = new AccountBO();
 
+        entity.setId(dto.getId());
         entity.setUser(user);
         entity.setShoppingCart(shoppingCart);
 

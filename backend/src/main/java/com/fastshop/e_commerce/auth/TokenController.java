@@ -20,7 +20,6 @@ public class TokenController {
 
     @PostMapping("/login")
     public ResponseEntity<LoginResponseDTO> login(@RequestBody LoginRequestDTO request) {
-        System.out.println("Chegou aqui 2");
         LoginResponseDTO loginResponse = tokenService.login(request);
         return ResponseEntity.ok(loginResponse);
     }

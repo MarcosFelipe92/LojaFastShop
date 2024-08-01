@@ -5,9 +5,7 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.access.AccessDeniedException;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.stereotype.Service;
@@ -15,7 +13,6 @@ import org.springframework.stereotype.Service;
 import com.fastshop.e_commerce.dtos.user.UserDTO;
 import com.fastshop.e_commerce.dtos.user.UserSummaryDTO;
 import com.fastshop.e_commerce.exceptions.common.NotFoundException;
-import com.fastshop.e_commerce.exceptions.service.DatabaseException;
 import com.fastshop.e_commerce.exceptions.service.InvalidEmailException;
 import com.fastshop.e_commerce.mappers.UserMapper;
 import com.fastshop.e_commerce.models.AccountBO;
@@ -24,7 +21,6 @@ import com.fastshop.e_commerce.models.ShoppingCartBO;
 import com.fastshop.e_commerce.models.UserBO;
 import com.fastshop.e_commerce.repositories.UserRepository;
 
-import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 
@@ -40,21 +36,28 @@ public class UserService {
         return repository.findAll().stream().map(x -> new UserSummaryDTO(x)).collect(Collectors.toList());
     }
 
-    public UserDTO findById(Long id) {
-        UserBO entity = repository.findById(id).orElseThrow(() -> new NotFoundException("User not found"));
-        return new UserDTO(entity, entity.getPhones(), entity.getRoles());
+    public UserDTO findById(Long id, JwtAuthenticationToken token) {
+        if (validateUserPermission(token, id)) {
+            UserBO entity = repository.findById(id).orElseThrow(() -> new NotFoundException("User not found"));
+            return new UserDTO(entity, entity.getPhones(), entity.getRoles());
+        } else {
+            throw new AccessDeniedException(
+                    "You are not allowed to modify to an user that does not you.");
+        }
     }
 
-    public Optional<UserBO> findByEmail(String email) {
-        Optional<UserBO> entity = repository.findByEmail(email);
-        return entity;
+    public UserDTO findByEmail(String email) {
+        UserBO entity = repository.findByEmail(email);
+        return new UserDTO(entity);
     }
 
     @Transactional
     public UserDTO register(UserDTO dto) {
-        repository.findByEmail(dto.getEmail()).ifPresent(user -> {
+        UserBO userExists = repository.findByEmail(dto.getEmail());
+        if (userExists != null) {
             throw new InvalidEmailException("Email already registered");
-        });
+        }
+        ;
 
         RoleBO basicRole = roleService.findByName(RoleBO.Values.BASIC.name());
 
@@ -76,14 +79,11 @@ public class UserService {
 
     @Transactional
     public UserDTO update(UserDTO dto, Long id, JwtAuthenticationToken token) {
-        UserBO requestUser = repository.findById(Long.parseLong(token.getName())).get();
-        UserBO userUpdated = repository.findById(id).orElseThrow(() -> new NotFoundException("Entity not found"));
-        boolean isAdmin = requestUser.hasRole(RoleBO.Values.ADMIN.name());
-
-        if (isAdmin || requestUser.getId().equals(userUpdated.getId())) {
+        if (validateUserPermission(token, id)) {
+            UserBO userUpdated = repository.findById(id).orElseThrow(() -> new NotFoundException("User not found"));
             AccountBO account = userUpdated.getAccount();
-
             UserMapper.copyAttributes(dto, userUpdated, account);
+            userUpdated.setPassword(passwordEncoder.encode(dto.getPassword()));
             userUpdated = repository.save(userUpdated);
             return new UserDTO(userUpdated);
         } else {
@@ -92,11 +92,23 @@ public class UserService {
         }
     }
 
-    public void delete(Long id) {
-        try {
+    public void delete(Long id, JwtAuthenticationToken token) {
+        if (validateUserPermission(token, id)) {
             repository.deleteById(id);
-        } catch (DataIntegrityViolationException e) {
-            throw new DatabaseException("Integrity violation");
+        } else {
+            throw new AccessDeniedException(
+                    "You are not allowed to delete to an user that does not you.");
         }
+    }
+
+    private boolean validateUserPermission(JwtAuthenticationToken token, Long dbUserId) {
+        UserBO requestUser = repository.findById(Long.parseLong(token.getName())).get();
+        UserBO userFromDb = repository.findById(dbUserId).orElseThrow(() -> new NotFoundException("User not found"));
+        boolean isAdmin = requestUser.hasRole(RoleBO.Values.ADMIN.name());
+
+        if (isAdmin || requestUser.getId().equals(userFromDb.getId())) {
+            return true;
+        }
+        return false;
     }
 }
