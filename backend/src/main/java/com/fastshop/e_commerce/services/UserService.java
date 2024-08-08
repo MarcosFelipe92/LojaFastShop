@@ -1,7 +1,6 @@
 package com.fastshop.e_commerce.services;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -48,7 +47,7 @@ public class UserService {
 
     public UserDTO findByEmail(String email) {
         UserBO entity = repository.findByEmail(email);
-        return new UserDTO(entity);
+        return new UserDTO(entity, entity.getRoles());
     }
 
     @Transactional

@@ -42,4 +42,9 @@ public class UserDTO {
         phones.forEach(i -> this.phones.add(new PhoneDTO(i)));
         roles.forEach(i -> this.roles.add(new RoleDTO(i)));
     }
+
+    public UserDTO(UserBO entity, Set<RoleBO> roles) {
+        this(entity);
+        roles.forEach(i -> this.roles.add(new RoleDTO(i)));
+    }
 }
