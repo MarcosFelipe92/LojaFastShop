@@ -15,7 +15,9 @@ import com.fastshop.e_commerce.models.UserBO;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
+@ToString
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor

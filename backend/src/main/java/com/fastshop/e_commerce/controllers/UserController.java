@@ -39,7 +39,7 @@ public class UserController {
 
     @PostMapping("/register")
     public ResponseEntity<UserDTO> register(@RequestBody UserDTO dto) {
-        UserDTO obj = service.register(dto);
+        UserDTO obj = service.create(dto);
         return ResponseEntity.ok().body(obj);
     }
 

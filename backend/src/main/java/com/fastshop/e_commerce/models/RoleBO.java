@@ -24,22 +24,30 @@ public class RoleBO {
 
     private String name;
 
+    public static String getBasicRole() {
+        return Values.BASIC.name();
+    }
+
+    public static String getAdminRole() {
+        return Values.ADMIN.name();
+    }
+
     public enum Values {
         ADMIN(1L),
         BASIC(2L);
 
         private Long id;
 
-        Values(Long id) {
-            this.id = id;
+        public Long getId() {
+            return id;
         }
 
         public void setId(Long id) {
             this.id = id;
         }
 
-        public long getId() {
-            return id;
+        Values(Long id) {
+            this.id = id;
         }
     }
 }

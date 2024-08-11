@@ -36,9 +36,14 @@ public class AccountService {
     }
 
     @Transactional
-    public AccountDTO findById(Long id) {
-        AccountBO entity = repository.findById(id).orElseThrow(() -> new NotFoundException("Entity not found"));
-        return new AccountDTO(entity, entity.getAddresses());
+    public AccountDTO findById(Long id, JwtAuthenticationToken token) {
+        AccountBO account = repository.findById(id).orElseThrow(() -> new NotFoundException("Account not found"));
+        if (validateUserPermission(token, account.getUser().getId())) {
+            return new AccountDTO(account, account.getAddresses());
+        } else {
+            throw new AccessDeniedException(
+                    "You are not allowed to modify to an account that does not you.");
+        }
     }
 
     @Transactional
@@ -51,13 +56,10 @@ public class AccountService {
 
     @Transactional
     public void addAddressToAccount(Long accountId, AddressDTO addressDTO, JwtAuthenticationToken token) {
-        UserBO user = UserMapper.dtoToEntity(userService.findById(Long.parseLong(token.getName()), token));
-        boolean isAdmin = user.hasRole(RoleBO.Values.ADMIN.name());
-
         AccountBO account = repository.findById(accountId)
                 .orElseThrow(() -> new NotFoundException("Account not found"));
 
-        if (isAdmin || account.getUser().getId().equals(user.getId())) {
+        if (validateUserPermission(token, account.getUser().getId())) {
             AddressBO address = AddressMapper.dtoToEntity(addressDTO, account);
             account.getAddresses().add(address);
             repository.save(account);
@@ -101,7 +103,7 @@ public class AccountService {
         UserBO userRequestBO = UserMapper.dtoToEntity(userRequestDTO);
         UserBO userFromDb = UserMapper.dtoToEntity(userDbDTO);
 
-        boolean isAdmin = userRequestBO.hasRole(RoleBO.Values.ADMIN.name());
+        boolean isAdmin = userRequestBO.hasRole(RoleBO.getAdminRole());
 
         if (isAdmin || userRequestBO.getId().equals(userFromDb.getId())) {
             return true;

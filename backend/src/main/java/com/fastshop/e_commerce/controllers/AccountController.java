@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -24,6 +25,7 @@ public class AccountController {
     @Autowired
     private AccountService service;
 
+    @PreAuthorize("hasAuthority('SCOPE_ADMIN')")
     @GetMapping
     public ResponseEntity<List<AccountSummaryDTO>> findAll() {
         List<AccountSummaryDTO> list = service.findAll();
@@ -31,8 +33,8 @@ public class AccountController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<AccountDTO> findById(@PathVariable Long id) {
-        AccountDTO entity = service.findById(id);
+    public ResponseEntity<AccountDTO> findById(@PathVariable Long id, JwtAuthenticationToken token) {
+        AccountDTO entity = service.findById(id, token);
         return ResponseEntity.ok().body(entity);
     }
 
@@ -47,7 +49,7 @@ public class AccountController {
     public ResponseEntity<String> removeAddressToAccount(@PathVariable Long id,
             @PathVariable Long addressId, JwtAuthenticationToken token) {
         service.removeAddressToAccount(id, addressId, token);
-        return ResponseEntity.ok().body("Address added successfully");
+        return ResponseEntity.ok().body("Address removed successfully");
     }
 
     // @PutMapping("/{id}")

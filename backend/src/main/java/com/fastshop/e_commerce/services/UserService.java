@@ -51,14 +51,14 @@ public class UserService {
     }
 
     @Transactional
-    public UserDTO register(UserDTO dto) {
+    public UserDTO create(UserDTO dto) {
         UserBO userExists = repository.findByEmail(dto.getEmail());
         if (userExists != null) {
             throw new InvalidEmailException("Email already registered");
         }
         ;
 
-        RoleBO basicRole = roleService.findByName(RoleBO.Values.BASIC.name());
+        RoleBO basicRole = roleService.findByName(RoleBO.getBasicRole());
 
         UserBO user = UserMapper.dtoToEntity(dto);
         user.setPassword(passwordEncoder.encode(dto.getPassword()));
@@ -103,7 +103,7 @@ public class UserService {
     private boolean validateUserPermission(JwtAuthenticationToken token, Long dbUserId) {
         UserBO requestUser = repository.findById(Long.parseLong(token.getName())).get();
         UserBO userFromDb = repository.findById(dbUserId).orElseThrow(() -> new NotFoundException("User not found"));
-        boolean isAdmin = requestUser.hasRole(RoleBO.Values.ADMIN.name());
+        boolean isAdmin = requestUser.hasRole(RoleBO.getAdminRole());
 
         if (isAdmin || requestUser.getId().equals(userFromDb.getId())) {
             return true;
