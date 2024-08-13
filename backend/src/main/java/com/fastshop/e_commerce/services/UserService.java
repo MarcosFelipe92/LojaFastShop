@@ -38,7 +38,7 @@ public class UserService {
     public UserDTO findById(Long id, JwtAuthenticationToken token) {
         if (validateUserPermission(token, id)) {
             UserBO entity = repository.findById(id).orElseThrow(() -> new NotFoundException("User not found"));
-            return new UserDTO(entity, entity.getPhones(), entity.getRoles());
+            return new UserDTO(entity, null, entity.getRoles());
         } else {
             throw new AccessDeniedException(
                     "You are not allowed to modify to an user that does not you.");

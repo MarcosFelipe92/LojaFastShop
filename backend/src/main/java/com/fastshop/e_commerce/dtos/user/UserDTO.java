@@ -39,14 +39,14 @@ public class UserDTO {
         this.account = new AccountDTO(entity.getAccount());
     }
 
-    public UserDTO(UserBO entity, List<PhoneBO> phones, Set<RoleBO> roles) {
+    public UserDTO(UserBO entity, Set<RoleBO> roles) {
         this(entity);
-        phones.forEach(i -> this.phones.add(new PhoneDTO(i)));
         roles.forEach(i -> this.roles.add(new RoleDTO(i)));
     }
 
-    public UserDTO(UserBO entity, Set<RoleBO> roles) {
+    public UserDTO(UserBO entity, List<PhoneBO> phones, Set<RoleBO> roles) {
         this(entity);
+        phones.forEach(i -> this.phones.add(new PhoneDTO(i)));
         roles.forEach(i -> this.roles.add(new RoleDTO(i)));
     }
 }

@@ -1,9 +1,7 @@
 package com.fastshop.e_commerce.mappers;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -16,33 +14,40 @@ import com.fastshop.e_commerce.models.UserBO;
 
 public class UserMapperTest {
 
-    @Test
-    void testDtoToEntity() {
-        // Arrange
-        PhoneDTO phoneDTO = new PhoneDTO(1L, "123456789", "MOBILE", 1L);
-        Set<RoleDTO> rolesDTO = new HashSet<>();
-        rolesDTO.add(new RoleDTO(1L, "USER"));
+    private static final Long ID = 1L;
+    private static final String NAME = "John Doe";
+    private static final String EMAIL = "johndoe@example.com";
+    private static final String PASSWORD = "password123";
+    private static final String TYPE_PHONE = "celular";
+    private static final String NUMBER = "988888888";
+    private static final String NAME_ROLE = "BASIC";
 
-        UserDTO userDTO = new UserDTO(1L, "John Doe", "john.doe@example.com", "password", null, List.of(phoneDTO),
-                rolesDTO);
+    @Test
+    void shouldReturnInstanceUserBOWhenPassedUserDTO() {
+        // Arrange
+        PhoneDTO phoneDTO = new PhoneDTO(ID, NUMBER, TYPE_PHONE, ID);
+        RoleDTO roleDTO = new RoleDTO(ID, NAME_ROLE);
+
+        UserDTO input = new UserDTO(ID, NAME, EMAIL, PASSWORD, null, List.of(phoneDTO),
+                Set.of(roleDTO));
 
         // Act
-        UserBO userBO = UserMapper.dtoToEntity(userDTO);
+        UserBO output = UserMapper.dtoToEntity(input);
 
         // Assert
-        assertEquals(userDTO.getId(), userBO.getId());
-        assertEquals(userDTO.getName(), userBO.getName());
-        assertEquals(userDTO.getEmail(), userBO.getEmail());
-        assertEquals(userDTO.getPassword(), userBO.getPassword());
+        assertEquals(input.getId(), output.getId());
+        assertEquals(input.getName(), output.getName());
+        assertEquals(input.getEmail(), output.getEmail());
+        assertEquals(input.getPassword(), output.getPassword());
 
-        assertNotNull(userBO.getPhones());
-        assertEquals(1, userBO.getPhones().size());
-        assertEquals(phoneDTO.getNumber(), userBO.getPhones().get(0).getNumber());
-        assertEquals(phoneDTO.getUserId(), userBO.getPhones().get(0).getUser().getId());
+        assertEquals(input.getPhones().size(), output.getPhones().size());
+        assertEquals(phoneDTO.getNumber(), output.getPhones().get(0).getNumber());
+        assertEquals(phoneDTO.getType(), output.getPhones().get(0).getType());
+        assertEquals(phoneDTO.getUserId(), output.getPhones().get(0).getUser().getId());
 
-        assertNotNull(userBO.getRoles());
-        assertEquals(1, userBO.getRoles().size());
-        assertEquals(rolesDTO.iterator().next().getId(), userBO.getRoles().iterator().next().getId());
+        assertEquals(input.getPhones().size(), output.getPhones().size());
+        assertEquals(roleDTO.getId(), output.getRoles().iterator().next().getId());
+        assertEquals(roleDTO.getName(), output.getRoles().iterator().next().getName());
     }
 
 }
