@@ -33,7 +33,7 @@ public class UserMapperTest {
     @Nested
     class DtoToEntity {
         @Test
-        void shouldReturnInstanceUserBOWhenPassedUserDTO() {
+        void shouldCreateUserBOWhenUserBOIsPassed() {
             // Arrange
             PhoneDTO phoneDTO = new PhoneDTO(ID, NUMBER, TYPE_PHONE, ID);
             RoleDTO roleDTO = new RoleDTO(ID, NAME_ROLE);
@@ -164,7 +164,7 @@ public class UserMapperTest {
     }
 
     @Nested
-    class entityToSummaryDto {
+    class EntityToSummaryDto {
 
         @Test
         void shouldCreateUserSummaryDTOWhenUserBOIsPassed() {

@@ -56,8 +56,4 @@ public class AccountMapper {
         return new AccountDTO(id, userId, shoppingCart, addressesToAdd);
     }
 
-    public static void copyAttributes(AccountBO entity, UserBO user, ShoppingCartBO shoppingCart) {
-        entity.setUser(user);
-        entity.setShoppingCart(shoppingCart);
-    }
 }

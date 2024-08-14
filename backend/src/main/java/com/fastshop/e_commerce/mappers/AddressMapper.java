@@ -40,16 +40,4 @@ public class AddressMapper {
         return new AddressDTO(id, zipCode, street, number, complement, neighborhood, city, state, country, accountId);
     }
 
-    public static void copyAttributes(AddressDTO dto, AddressBO entity, AccountBO account) {
-        entity.setId(dto.getId());
-        entity.setZipCode(dto.getZipCode());
-        entity.setStreet(dto.getStreet());
-        entity.setNumber(dto.getNumber());
-        entity.setComplement(dto.getComplement());
-        entity.setNeighborhood(dto.getNeighborhood());
-        entity.setCity(dto.getCity());
-        entity.setState(dto.getState());
-        entity.setCountry(dto.getCountry());
-        entity.setAccount(account);
-    }
 }
