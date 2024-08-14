@@ -25,6 +25,21 @@ public class AddressMapper {
         return entity;
     }
 
+    public static AddressDTO entityToDto(AddressBO entity) {
+        Long id = entity.getId();
+        String zipCode = entity.getZipCode();
+        String street = entity.getStreet();
+        String number = entity.getNumber();
+        String complement = entity.getComplement();
+        String neighborhood = entity.getNeighborhood();
+        String city = entity.getCity();
+        String state = entity.getState();
+        String country = entity.getCountry();
+        Long accountId = entity.getAccount().getId();
+
+        return new AddressDTO(id, zipCode, street, number, complement, neighborhood, city, state, country, accountId);
+    }
+
     public static void copyAttributes(AddressDTO dto, AddressBO entity, AccountBO account) {
         entity.setId(dto.getId());
         entity.setZipCode(dto.getZipCode());

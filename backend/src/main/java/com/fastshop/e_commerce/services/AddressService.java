@@ -21,22 +21,22 @@ public class AddressService {
     private AddressRepository repository;
 
     public List<AddressDTO> findAll() {
-        return repository.findAll().stream().map(x -> new AddressDTO(x)).collect(Collectors.toList());
+        return repository.findAll().stream().map(AddressMapper::entityToDto).collect(Collectors.toList());
     }
 
     @Transactional
     public AddressDTO findById(Long id) {
-        AddressBO entity = repository.findById(id).orElseThrow(() -> new NotFoundException("Address not found"));
-        return new AddressDTO(entity);
+        AddressBO address = repository.findById(id).orElseThrow(() -> new NotFoundException("Address not found"));
+        return AddressMapper.entityToDto(address);
     }
 
     @Transactional
     public AddressDTO insert(AddressDTO dto, AccountBO account) {
-        AddressBO entity = new AddressBO();
-        AddressMapper.copyAttributes(dto, entity, account);
+        AddressBO address = new AddressBO();
+        AddressMapper.copyAttributes(dto, address, account);
 
-        entity = repository.save(entity);
-        return new AddressDTO(entity);
+        address = repository.save(address);
+        return AddressMapper.entityToDto(address);
     }
 
     @Transactional

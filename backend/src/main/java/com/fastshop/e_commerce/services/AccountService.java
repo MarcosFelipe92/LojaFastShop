@@ -7,17 +7,16 @@ import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.stereotype.Service;
 
+import com.fastshop.e_commerce.auth.AuthService;
 import com.fastshop.e_commerce.dtos.account.AccountDTO;
 import com.fastshop.e_commerce.dtos.account.AccountSummaryDTO;
 import com.fastshop.e_commerce.dtos.address.AddressDTO;
 import com.fastshop.e_commerce.dtos.user.UserDTO;
 import com.fastshop.e_commerce.exceptions.common.NotFoundException;
+import com.fastshop.e_commerce.mappers.AccountMapper;
 import com.fastshop.e_commerce.mappers.AddressMapper;
-import com.fastshop.e_commerce.mappers.UserMapper;
 import com.fastshop.e_commerce.models.AccountBO;
 import com.fastshop.e_commerce.models.AddressBO;
-import com.fastshop.e_commerce.models.RoleBO;
-import com.fastshop.e_commerce.models.UserBO;
 import com.fastshop.e_commerce.repositories.AccountRepository;
 
 import jakarta.transaction.Transactional;
@@ -28,8 +27,8 @@ import lombok.RequiredArgsConstructor;
 public class AccountService {
 
     private final AccountRepository repository;
-    private final UserService userService;
     private final AddressService addressService;
+    private final AuthService authService;
 
     public List<AccountSummaryDTO> findAll() {
         return repository.findAll().stream().map(x -> new AccountSummaryDTO(x)).collect(Collectors.toList());
@@ -38,8 +37,8 @@ public class AccountService {
     @Transactional
     public AccountDTO findById(Long id, JwtAuthenticationToken token) {
         AccountBO account = repository.findById(id).orElseThrow(() -> new NotFoundException("Account not found"));
-        if (validateUserPermission(token, account.getUser().getId())) {
-            return new AccountDTO(account, account.getAddresses());
+        if (authService.validateUserPermission(token, account.getUser().getId())) {
+            return AccountMapper.entityToDto(account, account.getAddresses());
         } else {
             throw new AccessDeniedException(
                     "You are not allowed to modify to an account that does not you.");
@@ -51,7 +50,7 @@ public class AccountService {
         AccountBO entity = new AccountBO();
 
         entity = repository.save(entity);
-        return new AccountDTO(entity);
+        return AccountMapper.entityToDto(entity);
     }
 
     @Transactional
@@ -59,7 +58,7 @@ public class AccountService {
         AccountBO account = repository.findById(accountId)
                 .orElseThrow(() -> new NotFoundException("Account not found"));
 
-        if (validateUserPermission(token, account.getUser().getId())) {
+        if (authService.validateUserPermission(token, account.getUser().getId())) {
             AddressBO address = AddressMapper.dtoToEntity(addressDTO, account);
             account.getAddresses().add(address);
             repository.save(account);
@@ -74,7 +73,7 @@ public class AccountService {
         AccountBO account = repository.findById(accountId)
                 .orElseThrow(() -> new NotFoundException("Account not found"));
 
-        if (validateUserPermission(token, account.getUser().getId())) {
+        if (authService.validateUserPermission(token, account.getUser().getId())) {
             AddressBO addressToRemove = null;
             for (AddressBO address : account.getAddresses()) {
                 if (address.getId().equals(addressId)) {
@@ -94,21 +93,6 @@ public class AccountService {
             throw new AccessDeniedException(
                     "You are not allowed to remove an address to an account that does not belong to you.");
         }
-    }
-
-    private boolean validateUserPermission(JwtAuthenticationToken token, Long dbUserId) {
-        UserDTO userRequestDTO = userService.findById(Long.parseLong(token.getName()), token);
-        UserDTO userDbDTO = userService.findById(dbUserId, token);
-
-        UserBO userRequestBO = UserMapper.dtoToEntity(userRequestDTO);
-        UserBO userFromDb = UserMapper.dtoToEntity(userDbDTO);
-
-        boolean isAdmin = userRequestBO.hasRole(RoleBO.getAdminRole());
-
-        if (isAdmin || userRequestBO.getId().equals(userFromDb.getId())) {
-            return true;
-        }
-        return false;
     }
 
     // @Transactional

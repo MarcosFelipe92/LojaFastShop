@@ -8,18 +8,13 @@ import java.util.Set;
 import com.fastshop.e_commerce.dtos.account.AccountDTO;
 import com.fastshop.e_commerce.dtos.phone.PhoneDTO;
 import com.fastshop.e_commerce.dtos.role.RoleDTO;
-import com.fastshop.e_commerce.models.PhoneBO;
-import com.fastshop.e_commerce.models.RoleBO;
-import com.fastshop.e_commerce.models.UserBO;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 @ToString
 @Getter
-@AllArgsConstructor
 @NoArgsConstructor
 public class UserDTO {
     private Long id;
@@ -31,22 +26,23 @@ public class UserDTO {
     private List<PhoneDTO> phones = new ArrayList<>();
     private Set<RoleDTO> roles = new HashSet<>();
 
-    public UserDTO(UserBO entity) {
-        this.id = entity.getId();
-        this.name = entity.getName();
-        this.email = entity.getEmail();
-        this.password = entity.getPassword();
-        this.account = new AccountDTO(entity.getAccount());
+    public UserDTO(Long id, String name, String email, String password, AccountDTO account) {
+        this.id = id;
+        this.name = name;
+        this.email = email;
+        this.password = password;
+        this.account = account;
     }
 
-    public UserDTO(UserBO entity, Set<RoleBO> roles) {
-        this(entity);
-        roles.forEach(i -> this.roles.add(new RoleDTO(i)));
+    public UserDTO(Long id, String name, String email, String password, AccountDTO account, Set<RoleDTO> roles) {
+        this(id, name, email, password, account);
+        this.roles.addAll(roles);
     }
 
-    public UserDTO(UserBO entity, List<PhoneBO> phones, Set<RoleBO> roles) {
-        this(entity);
-        phones.forEach(i -> this.phones.add(new PhoneDTO(i)));
-        roles.forEach(i -> this.roles.add(new RoleDTO(i)));
+    public UserDTO(Long id, String name, String email, String password, AccountDTO account, Set<RoleDTO> roles,
+            List<PhoneDTO> phones) {
+        this(id, name, email, password, account, roles);
+        this.phones.addAll(phones);
     }
+
 }

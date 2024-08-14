@@ -25,11 +25,13 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 
+import com.fastshop.e_commerce.auth.AuthService;
 import com.fastshop.e_commerce.dtos.account.AccountDTO;
 import com.fastshop.e_commerce.dtos.phone.PhoneDTO;
 import com.fastshop.e_commerce.dtos.role.RoleDTO;
 import com.fastshop.e_commerce.dtos.user.UserDTO;
 import com.fastshop.e_commerce.exceptions.service.InvalidEmailException;
+import com.fastshop.e_commerce.mappers.UserMapper;
 import com.fastshop.e_commerce.models.AccountBO;
 import com.fastshop.e_commerce.models.PhoneBO;
 import com.fastshop.e_commerce.models.RoleBO;
@@ -45,6 +47,8 @@ public class UserServiceTest {
     private static final String NAME = "Test";
     private static final String PASSWORD = "123456";
     private static final String ENCODED_PASSWORD = "encodedPassword";
+    private static final String TYPE_PHONE = "celular";
+    private static final String NUMBER = "988888888";
 
     @InjectMocks
     private UserService userService;
@@ -57,6 +61,9 @@ public class UserServiceTest {
 
     @Mock
     private PasswordEncoder passwordEncoder;
+
+    @Mock
+    private AuthService authService;
 
     @Mock
     private AccountBO mockAccountBO;
@@ -80,37 +87,7 @@ public class UserServiceTest {
     private ArgumentCaptor<Long> idArgumentCaptor;
 
     @Nested
-    class ConfigurationTestsSetup {
-        void setupMockUser() {
-            when(mockUserBO.getId()).thenReturn(ID);
-            when(mockUserBO.getName()).thenReturn(NAME);
-            when(mockUserBO.getEmail()).thenReturn(EMAIL);
-            when(mockUserBO.getPassword()).thenReturn(PASSWORD);
-            when(mockUserBO.getAccount()).thenReturn(mockAccountBO);
-
-            List<PhoneBO> phones = new ArrayList<>();
-            phones.add(new PhoneBO(1L, "123456789", "celular", mockUserBO));
-            when(mockUserBO.getPhones()).thenReturn(phones);
-
-            Set<RoleBO> roles = new HashSet<>();
-            roles.add(mockRoleBO);
-            when(mockUserBO.getRoles()).thenReturn(roles);
-        }
-
-        void setupMockAccount() {
-            when(mockAccountBO.getId()).thenReturn(ID);
-            when(mockAccountBO.getShoppingCart()).thenReturn(mockShoppingCartBO);
-            when(mockAccountBO.getUser()).thenReturn(mockUserBO);
-        }
-
-        void setupMockShoppingCart() {
-            when(mockShoppingCartBO.getId()).thenReturn(ID);
-            when(mockShoppingCartBO.getAccount()).thenReturn(mockAccountBO);
-        }
-    }
-
-    @Nested
-    class CreateUser extends ConfigurationTestsSetup {
+    class CreateUser {
 
         @Test
         void shouldThrowExceptionWhenTryingRegisterUserWithEmailExisting() {
@@ -119,7 +96,7 @@ public class UserServiceTest {
             List<PhoneDTO> phones = new ArrayList<>();
             Set<RoleDTO> roles = new HashSet<>();
             UserDTO input = new UserDTO(ID, NAME, EMAIL, PASSWORD, new AccountDTO(),
-                    phones, roles);
+                    roles, phones);
 
             assertThrows(InvalidEmailException.class, () -> userService.create(input));
         }
@@ -134,7 +111,7 @@ public class UserServiceTest {
             when(passwordEncoder.encode(any(String.class))).thenReturn(ENCODED_PASSWORD);
             when(userRepository.findByEmail(any(String.class))).thenReturn(null);
 
-            UserDTO input = new UserDTO(mockUserBO);
+            UserDTO input = UserMapper.entityToDto(mockUserBO);
 
             UserDTO output = userService.create(input);
             UserBO userCaptured = userArgumentCaptor.getValue();
@@ -157,7 +134,7 @@ public class UserServiceTest {
     }
 
     @Nested
-    class findById extends ConfigurationTestsSetup {
+    class findById {
 
         @Test
         void shouldReturnUserWhenValidIdPassed() {
@@ -165,11 +142,11 @@ public class UserServiceTest {
             setupMockAccount();
             setupMockShoppingCart();
             when(userRepository.findById(idArgumentCaptor.capture())).thenReturn(Optional.of(mockUserBO));
-            when(mockToken.getName()).thenReturn(String.valueOf(ID));
+            when(authService.validateUserPermission(mockToken, ID)).thenReturn(true);
 
             UserDTO output = userService.findById(ID, mockToken);
 
-            verify(userRepository, times(3)).findById(idArgumentCaptor.capture());
+            verify(userRepository, times(1)).findById(idArgumentCaptor.capture());
             assertNotNull(output);
             assertEquals(ID, output.getId());
             assertEquals(ID, idArgumentCaptor.getValue());
@@ -180,6 +157,33 @@ public class UserServiceTest {
             assertNotNull(output.getRoles());
             assertEquals(1, output.getRoles().size());
         }
+    }
+
+    private void setupMockUser() {
+        when(mockUserBO.getId()).thenReturn(ID);
+        when(mockUserBO.getName()).thenReturn(NAME);
+        when(mockUserBO.getEmail()).thenReturn(EMAIL);
+        when(mockUserBO.getPassword()).thenReturn(PASSWORD);
+        when(mockUserBO.getAccount()).thenReturn(mockAccountBO);
+
+        List<PhoneBO> phones = new ArrayList<>();
+        phones.add(new PhoneBO(ID, NUMBER, TYPE_PHONE, mockUserBO));
+        when(mockUserBO.getPhones()).thenReturn(phones);
+
+        Set<RoleBO> roles = new HashSet<>();
+        roles.add(mockRoleBO);
+        when(mockUserBO.getRoles()).thenReturn(roles);
+    }
+
+    private void setupMockAccount() {
+        when(mockAccountBO.getId()).thenReturn(ID);
+        when(mockAccountBO.getShoppingCart()).thenReturn(mockShoppingCartBO);
+        when(mockAccountBO.getUser()).thenReturn(mockUserBO);
+    }
+
+    private void setupMockShoppingCart() {
+        when(mockShoppingCartBO.getId()).thenReturn(ID);
+        when(mockShoppingCartBO.getAccount()).thenReturn(mockAccountBO);
     }
 
 }

@@ -10,4 +10,11 @@ public class RoleMapper {
         entity.setName(dto.getName());
         return entity;
     }
+
+    public static RoleDTO entityToDto(RoleBO entity) {
+        Long id = entity.getId();
+        String name = entity.getName();
+
+        return new RoleDTO(id, name);
+    }
 }

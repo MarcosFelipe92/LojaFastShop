@@ -9,6 +9,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.stereotype.Service;
 
+import com.fastshop.e_commerce.auth.AuthService;
 import com.fastshop.e_commerce.dtos.user.UserDTO;
 import com.fastshop.e_commerce.dtos.user.UserSummaryDTO;
 import com.fastshop.e_commerce.exceptions.common.NotFoundException;
@@ -30,15 +31,16 @@ public class UserService {
     private final UserRepository repository;
     private final RoleService roleService;
     private final PasswordEncoder passwordEncoder;
+    private final AuthService authService;
 
     public List<UserSummaryDTO> findAll() {
-        return repository.findAll().stream().map(x -> new UserSummaryDTO(x)).collect(Collectors.toList());
+        return repository.findAll().stream().map(x -> UserMapper.entityToSummaryDto(x)).collect(Collectors.toList());
     }
 
     public UserDTO findById(Long id, JwtAuthenticationToken token) {
-        if (validateUserPermission(token, id)) {
-            UserBO entity = repository.findById(id).orElseThrow(() -> new NotFoundException("User not found"));
-            return new UserDTO(entity, null, entity.getRoles());
+        UserBO entity = repository.findById(id).orElseThrow(() -> new NotFoundException("User not found"));
+        if (authService.validateUserPermission(token, id)) {
+            return UserMapper.entityToDto(entity, entity.getRoles(), entity.getPhones());
         } else {
             throw new AccessDeniedException(
                     "You are not allowed to modify to an user that does not you.");
@@ -47,7 +49,7 @@ public class UserService {
 
     public UserDTO findByEmail(String email) {
         UserBO entity = repository.findByEmail(email);
-        return new UserDTO(entity, entity.getRoles());
+        return UserMapper.entityToDto(entity, entity.getRoles());
     }
 
     @Transactional
@@ -73,18 +75,18 @@ public class UserService {
         account.setUser(user);
 
         user = repository.save(user);
-        return new UserDTO(user, user.getPhones(), user.getRoles());
+        return UserMapper.entityToDto(user, user.getRoles(), user.getPhones());
     }
 
     @Transactional
     public UserDTO update(UserDTO dto, Long id, JwtAuthenticationToken token) {
-        if (validateUserPermission(token, id)) {
-            UserBO userUpdated = repository.findById(id).orElseThrow(() -> new NotFoundException("User not found"));
+        UserBO userUpdated = repository.findById(id).orElseThrow(() -> new NotFoundException("User not found"));
+        if (authService.validateUserPermission(token, id)) {
             AccountBO account = userUpdated.getAccount();
             UserMapper.copyAttributes(dto, userUpdated, account);
             userUpdated.setPassword(passwordEncoder.encode(dto.getPassword()));
             userUpdated = repository.save(userUpdated);
-            return new UserDTO(userUpdated);
+            return UserMapper.entityToDto(userUpdated);
         } else {
             throw new AccessDeniedException(
                     "You are not allowed to modify to an user that does not you.");
@@ -92,22 +94,12 @@ public class UserService {
     }
 
     public void delete(Long id, JwtAuthenticationToken token) {
-        if (validateUserPermission(token, id)) {
+        repository.findById(id).orElseThrow(() -> new NotFoundException("User not found"));
+        if (authService.validateUserPermission(token, id)) {
             repository.deleteById(id);
         } else {
             throw new AccessDeniedException(
                     "You are not allowed to delete to an user that does not you.");
         }
-    }
-
-    private boolean validateUserPermission(JwtAuthenticationToken token, Long dbUserId) {
-        UserBO requestUser = repository.findById(Long.parseLong(token.getName())).get();
-        UserBO userFromDb = repository.findById(dbUserId).orElseThrow(() -> new NotFoundException("User not found"));
-        boolean isAdmin = requestUser.hasRole(RoleBO.getAdminRole());
-
-        if (isAdmin || requestUser.getId().equals(userFromDb.getId())) {
-            return true;
-        }
-        return false;
     }
 }

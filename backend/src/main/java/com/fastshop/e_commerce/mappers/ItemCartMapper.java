@@ -18,4 +18,14 @@ public class ItemCartMapper {
         return entity;
     }
 
+    public static ItemCartDTO entityToDto(ItemCartBO entity) {
+        Long id = entity.getId();
+        String name = entity.getName();
+        String description = entity.getDescription();
+        Double price = entity.getPrice();
+        Long shoppingCartId = entity.getShoppingCart().getId();
+
+        return new ItemCartDTO(id, name, description, price, shoppingCartId);
+    }
+
 }
