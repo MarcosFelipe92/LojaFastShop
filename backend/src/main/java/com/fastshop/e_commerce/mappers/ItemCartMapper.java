@@ -11,6 +11,7 @@ public class ItemCartMapper {
     public static ItemCartBO dtoToEntity(ItemCartDTO dto, ShoppingCartBO shoppingCartBO) {
         ItemCartBO entity = new ItemCartBO();
 
+        entity.setId(dto.getId());
         entity.setName(dto.getName());
         entity.setDescription(dto.getDescription());
         entity.setPrice(dto.getPrice());

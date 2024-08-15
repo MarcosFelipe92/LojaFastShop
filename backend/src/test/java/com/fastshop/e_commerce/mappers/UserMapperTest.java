@@ -36,19 +36,19 @@ public class UserMapperTest {
     private static final String NAME_ROLE = "BASIC";
 
     @Mock
-    private AccountBO accountBO;
+    private AccountBO mockAccountBO;
 
     @Mock
-    private ShoppingCartBO shoppingCartBO;
+    private ShoppingCartBO mockShoppingCartBO;
 
     @Mock
-    private PhoneBO phoneBO;
+    private PhoneBO mockPhoneBO;
 
     @Mock
-    private RoleBO roleBO;
+    private RoleBO mockRoleBO;
 
     @Mock
-    private UserBO userBO;
+    private UserBO mockUserBO;
 
     @Nested
     class DtoToEntity {
@@ -82,26 +82,26 @@ public class UserMapperTest {
 
         @BeforeEach
         void setup() {
-            when(accountBO.getId()).thenReturn(ID);
+            when(mockAccountBO.getId()).thenReturn(ID);
 
-            when(shoppingCartBO.getId()).thenReturn(ID);
-            when(shoppingCartBO.getAccount()).thenReturn(accountBO);
+            when(mockShoppingCartBO.getId()).thenReturn(ID);
+            when(mockShoppingCartBO.getAccount()).thenReturn(mockAccountBO);
 
-            when(userBO.getId()).thenReturn(ID);
-            when(userBO.getName()).thenReturn(NAME);
-            when(userBO.getEmail()).thenReturn(EMAIL);
-            when(userBO.getPassword()).thenReturn(PASSWORD);
-            when(userBO.getAccount()).thenReturn(accountBO);
+            when(mockUserBO.getId()).thenReturn(ID);
+            when(mockUserBO.getName()).thenReturn(NAME);
+            when(mockUserBO.getEmail()).thenReturn(EMAIL);
+            when(mockUserBO.getPassword()).thenReturn(PASSWORD);
+            when(mockUserBO.getAccount()).thenReturn(mockAccountBO);
 
-            when(accountBO.getUser()).thenReturn(userBO);
-            when(accountBO.getShoppingCart()).thenReturn(shoppingCartBO);
+            when(mockAccountBO.getUser()).thenReturn(mockUserBO);
+            when(mockAccountBO.getShoppingCart()).thenReturn(mockShoppingCartBO);
 
         }
 
         @Test
         void shouldCreateUserDTOWithoutRolesOrPhonesWhenUserBOIsPassed() {
             // Act
-            UserDTO output = UserMapper.entityToDto(userBO);
+            UserDTO output = UserMapper.entityToDto(mockUserBO);
 
             // Assert
             assertEquals(ID, output.getId());
@@ -114,13 +114,13 @@ public class UserMapperTest {
         @Test
         void shouldCreateUserDTOWithRolesWhenUserBOAndRolesArePassed() {
             // Arrange
-            when(roleBO.getId()).thenReturn(ID);
-            when(roleBO.getName()).thenReturn(NAME_ROLE);
+            when(mockRoleBO.getId()).thenReturn(ID);
+            when(mockRoleBO.getName()).thenReturn(NAME_ROLE);
 
-            when(userBO.getRoles()).thenReturn(Set.of(roleBO));
+            when(mockUserBO.getRoles()).thenReturn(Set.of(mockRoleBO));
 
             // Act
-            UserDTO output = UserMapper.entityToDto(userBO, userBO.getRoles());
+            UserDTO output = UserMapper.entityToDto(mockUserBO, mockUserBO.getRoles());
 
             // Assert
             assertEquals(ID, output.getId());
@@ -136,19 +136,19 @@ public class UserMapperTest {
         @Test
         void shouldCreateUserDTOWithPhonesAndRolesWhenUserBOAndPhonesAndRolesArePassed() {
             // Arrange
-            when(phoneBO.getId()).thenReturn(ID);
-            when(phoneBO.getType()).thenReturn(TYPE_PHONE);
-            when(phoneBO.getNumber()).thenReturn(NUMBER);
-            when(phoneBO.getUser()).thenReturn(userBO);
+            when(mockPhoneBO.getId()).thenReturn(ID);
+            when(mockPhoneBO.getType()).thenReturn(TYPE_PHONE);
+            when(mockPhoneBO.getNumber()).thenReturn(NUMBER);
+            when(mockPhoneBO.getUser()).thenReturn(mockUserBO);
 
-            when(roleBO.getId()).thenReturn(ID);
-            when(roleBO.getName()).thenReturn(NAME_ROLE);
+            when(mockRoleBO.getId()).thenReturn(ID);
+            when(mockRoleBO.getName()).thenReturn(NAME_ROLE);
 
-            when(userBO.getPhones()).thenReturn(List.of(phoneBO));
-            when(userBO.getRoles()).thenReturn(Set.of(roleBO));
+            when(mockUserBO.getPhones()).thenReturn(List.of(mockPhoneBO));
+            when(mockUserBO.getRoles()).thenReturn(Set.of(mockRoleBO));
 
             // Act
-            UserDTO output = UserMapper.entityToDto(userBO, userBO.getRoles(), userBO.getPhones());
+            UserDTO output = UserMapper.entityToDto(mockUserBO, mockUserBO.getRoles(), mockUserBO.getPhones());
 
             // Assert
             assertEquals(ID, output.getId());
@@ -167,11 +167,11 @@ public class UserMapperTest {
         @Test
         void shouldHandleEmptyPhonesAndRolesWhenUserBOIsPassed() {
             // Arrange
-            when(userBO.getPhones()).thenReturn(Collections.emptyList());
-            when(userBO.getRoles()).thenReturn(Collections.emptySet());
+            when(mockUserBO.getPhones()).thenReturn(Collections.emptyList());
+            when(mockUserBO.getRoles()).thenReturn(Collections.emptySet());
 
             // Act
-            UserDTO output = UserMapper.entityToDto(userBO, userBO.getRoles(), userBO.getPhones());
+            UserDTO output = UserMapper.entityToDto(mockUserBO, mockUserBO.getRoles(), mockUserBO.getPhones());
 
             // Assert
             assertEquals(ID, output.getId());
@@ -191,12 +191,12 @@ public class UserMapperTest {
         @Test
         void shouldCreateUserSummaryDTOWhenUserBOIsPassed() {
             // Arrange
-            when(userBO.getId()).thenReturn(ID);
-            when(userBO.getName()).thenReturn(NAME);
-            when(userBO.getEmail()).thenReturn(EMAIL);
+            when(mockUserBO.getId()).thenReturn(ID);
+            when(mockUserBO.getName()).thenReturn(NAME);
+            when(mockUserBO.getEmail()).thenReturn(EMAIL);
 
             // Act
-            UserSummaryDTO output = UserMapper.entityToSummaryDto(userBO);
+            UserSummaryDTO output = UserMapper.entityToSummaryDto(mockUserBO);
 
             // Assert
             assertEquals(ID, output.getId());
