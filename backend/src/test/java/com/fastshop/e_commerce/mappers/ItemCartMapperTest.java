@@ -53,7 +53,7 @@ public class ItemCartMapperTest {
     class EntityToDto {
 
         @Test
-        void shouldCreateAddressDTOWhenAddressBOIsPassed() {
+        void shouldCreateItemCartDTOWhenItemCartBOIsPassed() {
             // Arrange
             ItemCartBO input = new ItemCartBO(ID, NAME, DESCRIPTION, PRICE, mockShoppingCartBO);
 
