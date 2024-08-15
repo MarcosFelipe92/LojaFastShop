@@ -12,6 +12,7 @@ public class PhoneMapper {
     public static PhoneBO dtoToEntity(PhoneDTO dto, UserBO user) {
         PhoneBO entity = new PhoneBO();
 
+        entity.setId(dto.getId());
         entity.setNumber(dto.getNumber());
         entity.setType(dto.getType());
         entity.setUser(user);
@@ -28,10 +29,4 @@ public class PhoneMapper {
         return new PhoneDTO(id, number, type, userId);
     }
 
-    public static void copyAttributes(PhoneDTO dto, PhoneBO entity, UserBO user) {
-        entity.setId(dto.getId());
-        entity.setNumber(dto.getNumber());
-        entity.setType(dto.getType());
-        entity.setUser(user);
-    }
 }

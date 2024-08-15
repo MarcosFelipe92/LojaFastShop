@@ -27,7 +27,7 @@ public class AddressMapperTest {
     private static final String COUNTRY = "Pais Exemplo";
 
     @Mock
-    private AccountBO accountBO;
+    private AccountBO mockAccountBO;
 
     @Nested
     class DtoToEntity {
@@ -35,14 +35,15 @@ public class AddressMapperTest {
         @Test
         void shouldCreateAddressBOWhenAddressDTOIsPassed() {
             // Arrange
-            when(accountBO.getId()).thenReturn(ID);
+            when(mockAccountBO.getId()).thenReturn(ID);
 
             AddressDTO input = new AddressDTO(ID, ZIP_CODE, STREET, NUMBER, COMPLEMENT, NEIGHBORHOOD, CITY, STATE,
                     COUNTRY, ID);
 
             // Act
-            AddressBO output = AddressMapper.dtoToEntity(input, accountBO);
+            AddressBO output = AddressMapper.dtoToEntity(input, mockAccountBO);
 
+            // Assert
             assertEquals(ZIP_CODE, output.getZipCode());
             assertEquals(STREET, output.getStreet());
             assertEquals(NUMBER, output.getNumber());
@@ -63,14 +64,15 @@ public class AddressMapperTest {
         @Test
         void shouldCreateAddressDTOWhenAddressBOIsPassed() {
             // Arrange
-            when(accountBO.getId()).thenReturn(ID);
+            when(mockAccountBO.getId()).thenReturn(ID);
 
             AddressBO input = new AddressBO(ID, ZIP_CODE, STREET, NUMBER, COMPLEMENT, NEIGHBORHOOD, CITY, STATE,
-                    COUNTRY, accountBO);
+                    COUNTRY, mockAccountBO);
 
             // Act
             AddressDTO output = AddressMapper.entityToDto(input);
 
+            // Assert
             assertEquals(ZIP_CODE, output.getZipCode());
             assertEquals(STREET, output.getStreet());
             assertEquals(NUMBER, output.getNumber());

@@ -4,6 +4,7 @@ import java.util.Set;
 
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import com.fastshop.e_commerce.models.RoleBO;
@@ -15,6 +16,7 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
+@Profile(value = "test")
 @Configuration
 public class AdminUserConfig implements CommandLineRunner {
 

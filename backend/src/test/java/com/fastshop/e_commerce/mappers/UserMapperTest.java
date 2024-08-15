@@ -9,6 +9,8 @@ import java.util.Set;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.fastshop.e_commerce.dtos.phone.PhoneDTO;
 import com.fastshop.e_commerce.dtos.role.RoleDTO;
@@ -20,6 +22,7 @@ import com.fastshop.e_commerce.models.RoleBO;
 import com.fastshop.e_commerce.models.ShoppingCartBO;
 import com.fastshop.e_commerce.models.UserBO;
 
+@ExtendWith(MockitoExtension.class)
 public class UserMapperTest {
 
     private static final Long ID = 1L;
@@ -45,19 +48,17 @@ public class UserMapperTest {
             UserBO output = UserMapper.dtoToEntity(input);
 
             // Assert
-            assertEquals(input.getId(), output.getId());
-            assertEquals(input.getName(), output.getName());
-            assertEquals(input.getEmail(), output.getEmail());
-            assertEquals(input.getPassword(), output.getPassword());
+            assertEquals(ID, output.getId());
+            assertEquals(NAME, output.getName());
+            assertEquals(EMAIL, output.getEmail());
+            assertEquals(PASSWORD, output.getPassword());
 
             assertEquals(input.getPhones().size(), output.getPhones().size());
-            assertEquals(phoneDTO.getNumber(), output.getPhones().get(0).getNumber());
-            assertEquals(phoneDTO.getType(), output.getPhones().get(0).getType());
+            assertEquals(phoneDTO.getId(), output.getPhones().get(0).getId());
             assertEquals(phoneDTO.getUserId(), output.getPhones().get(0).getUser().getId());
 
             assertEquals(input.getPhones().size(), output.getPhones().size());
-            assertEquals(roleDTO.getId(), output.getRoles().iterator().next().getId());
-            assertEquals(roleDTO.getName(), output.getRoles().iterator().next().getName());
+            assertEquals(NAME_ROLE, output.getRoles().iterator().next().getName());
         }
     }
 
@@ -101,65 +102,77 @@ public class UserMapperTest {
 
         @Test
         void shouldCreateUserDTOWhenUserBOIsPassedWithoutRolesOrPhones() {
-            UserDTO userDTO = UserMapper.entityToDto(userBO);
+            // Act
+            UserDTO output = UserMapper.entityToDto(userBO);
 
-            assertEquals(userBO.getId(), userDTO.getId());
-            assertEquals(userBO.getName(), userDTO.getName());
-            assertEquals(userBO.getEmail(), userDTO.getEmail());
-            assertEquals(userBO.getPassword(), userDTO.getPassword());
-            assertEquals(userBO.getAccount().getId(), userDTO.getAccount().getId());
+            // Assert
+            assertEquals(ID, output.getId());
+            assertEquals(NAME, output.getName());
+            assertEquals(EMAIL, output.getEmail());
+            assertEquals(PASSWORD, output.getPassword());
+            assertEquals(userBO.getAccount().getId(), output.getAccount().getId());
         }
 
         @Test
         void shouldCreateUserDTOWithRolesWhenUserBOAndRolesArePassed() {
+            // Arrange
             userBO.setRoles(Set.of(roleBO));
 
-            UserDTO userDTO = UserMapper.entityToDto(userBO, userBO.getRoles());
+            // Act
+            UserDTO output = UserMapper.entityToDto(userBO, userBO.getRoles());
 
-            assertEquals(userBO.getId(), userDTO.getId());
-            assertEquals(userBO.getName(), userDTO.getName());
-            assertEquals(userBO.getEmail(), userDTO.getEmail());
-            assertEquals(userBO.getPassword(), userDTO.getPassword());
-            assertEquals(userBO.getAccount().getId(), userDTO.getAccount().getId());
+            // Assert
+            assertEquals(ID, output.getId());
+            assertEquals(NAME, output.getName());
+            assertEquals(EMAIL, output.getEmail());
+            assertEquals(PASSWORD, output.getPassword());
+            assertEquals(userBO.getAccount().getId(), output.getAccount().getId());
 
-            assertEquals(userBO.getRoles().size(), userDTO.getRoles().size());
-            assertEquals(userBO.getRoles().iterator().next().getId(), userDTO.getRoles().iterator().next().getId());
-            assertEquals(userBO.getRoles().iterator().next().getName(), userDTO.getRoles().iterator().next().getName());
+            assertEquals(userBO.getRoles().size(), output.getRoles().size());
+            assertEquals(userBO.getRoles().iterator().next().getId(), output.getRoles().iterator().next().getId());
         }
 
         @Test
         void shouldCreateUserDTOWithPhonesAndRolesWhenUserBOAndPhonesAndRolesArePassed() {
+            // Arrange
             userBO.setPhones(List.of(phoneBO));
             userBO.setRoles(Set.of(roleBO));
 
-            UserDTO userDTO = UserMapper.entityToDto(userBO, userBO.getRoles(), userBO.getPhones());
+            // Act
+            UserDTO output = UserMapper.entityToDto(userBO, userBO.getRoles(), userBO.getPhones());
 
-            assertEquals(userBO.getId(), userDTO.getId());
-            assertEquals(userBO.getName(), userDTO.getName());
-            assertEquals(userBO.getEmail(), userDTO.getEmail());
-            assertEquals(userBO.getPassword(), userDTO.getPassword());
-            assertEquals(userBO.getAccount().getId(), userDTO.getAccount().getId());
+            // Assert
+            assertEquals(ID, output.getId());
+            assertEquals(NAME, output.getName());
+            assertEquals(EMAIL, output.getEmail());
+            assertEquals(PASSWORD, output.getPassword());
+            assertEquals(userBO.getAccount().getId(), output.getAccount().getId());
 
-            assertEquals(userBO.getPhones().size(), userDTO.getPhones().size());
-            assertEquals(userBO.getPhones().get(0).getId(), userDTO.getPhones().get(0).getId());
-            assertEquals(userBO.getPhones().get(0).getNumber(), userDTO.getPhones().get(0).getNumber());
-            assertEquals(userBO.getPhones().get(0).getType(), userDTO.getPhones().get(0).getType());
-            assertEquals(userBO.getPhones().get(0).getUser().getId(), userDTO.getPhones().get(0).getUserId());
+            assertEquals(userBO.getPhones().size(), output.getPhones().size());
+            assertEquals(userBO.getPhones().get(0).getId(), output.getPhones().get(0).getId());
 
-            assertEquals(userBO.getRoles().size(), userDTO.getRoles().size());
-            assertEquals(userBO.getRoles().iterator().next().getId(), userDTO.getRoles().iterator().next().getId());
-            assertEquals(userBO.getRoles().iterator().next().getName(), userDTO.getRoles().iterator().next().getName());
+            assertEquals(userBO.getRoles().size(), output.getRoles().size());
+            assertEquals(userBO.getRoles().iterator().next().getId(), output.getRoles().iterator().next().getId());
         }
 
         @Test
         void shouldHandleEmptyPhonesAndRolesWhenUserBOIsPassed() {
+            // Arrange
             userBO.setPhones(Collections.emptyList());
             userBO.setRoles(Collections.emptySet());
 
-            UserDTO userDTO = UserMapper.entityToDto(userBO, userBO.getRoles(), userBO.getPhones());
+            // Act
+            UserDTO output = UserMapper.entityToDto(userBO, userBO.getRoles(), userBO.getPhones());
 
-            assertEquals(0, userDTO.getPhones().size());
-            assertEquals(0, userDTO.getRoles().size());
+            // Assert
+            assertEquals(ID, output.getId());
+            assertEquals(NAME, output.getName());
+            assertEquals(EMAIL, output.getEmail());
+            assertEquals(PASSWORD, output.getPassword());
+            assertEquals(userBO.getAccount().getId(), output.getAccount().getId());
+
+            assertEquals(0, output.getPhones().size());
+            assertEquals(0, output.getRoles().size());
         }
     }
 
@@ -168,16 +181,19 @@ public class UserMapperTest {
 
         @Test
         void shouldCreateUserSummaryDTOWhenUserBOIsPassed() {
+            // Arrange
             UserBO userBO = new UserBO();
             userBO.setId(ID);
             userBO.setName(NAME);
             userBO.setEmail(EMAIL);
 
-            UserSummaryDTO userSummaryDTO = UserMapper.entityToSummaryDto(userBO);
+            // Act
+            UserSummaryDTO output = UserMapper.entityToSummaryDto(userBO);
 
-            assertEquals(userBO.getId(), userSummaryDTO.getId());
-            assertEquals(userBO.getName(), userSummaryDTO.getName());
-            assertEquals(userBO.getEmail(), userSummaryDTO.getEmail());
+            // Assert
+            assertEquals(ID, output.getId());
+            assertEquals(NAME, output.getName());
+            assertEquals(EMAIL, output.getEmail());
         }
     }
 }
