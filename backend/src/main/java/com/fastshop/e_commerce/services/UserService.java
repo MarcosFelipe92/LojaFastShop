@@ -93,6 +93,7 @@ public class UserService {
         }
     }
 
+    @Transactional
     public void delete(Long id, JwtAuthenticationToken token) {
         repository.findById(id).orElseThrow(() -> new NotFoundException("User not found"));
         if (authService.validateUserPermission(token, id)) {

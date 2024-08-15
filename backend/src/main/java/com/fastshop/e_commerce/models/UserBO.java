@@ -9,6 +9,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import com.fastshop.e_commerce.dtos.login.LoginRequestDTO;
 
 import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -36,10 +37,12 @@ public class UserBO {
     private Long id;
 
     private String name;
+
+    @Column(unique = true)
     private String email;
     private String password;
 
-    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "users_roles", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<RoleBO> roles;
 
