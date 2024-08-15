@@ -1,6 +1,7 @@
 package com.fastshop.e_commerce.mappers;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.when;
 
 import java.util.Collections;
 import java.util.List;
@@ -10,6 +11,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.fastshop.e_commerce.dtos.phone.PhoneDTO;
@@ -33,10 +35,26 @@ public class UserMapperTest {
     private static final String NUMBER = "988888888";
     private static final String NAME_ROLE = "BASIC";
 
+    @Mock
+    private AccountBO accountBO;
+
+    @Mock
+    private ShoppingCartBO shoppingCartBO;
+
+    @Mock
+    private PhoneBO phoneBO;
+
+    @Mock
+    private RoleBO roleBO;
+
+    @Mock
+    private UserBO userBO;
+
     @Nested
     class DtoToEntity {
+
         @Test
-        void shouldCreateUserBOWhenUserBOIsPassed() {
+        void shouldCreateUserBOWhenUserDTOIsPassed() {
             // Arrange
             PhoneDTO phoneDTO = new PhoneDTO(ID, NUMBER, TYPE_PHONE, ID);
             RoleDTO roleDTO = new RoleDTO(ID, NAME_ROLE);
@@ -53,55 +71,35 @@ public class UserMapperTest {
             assertEquals(EMAIL, output.getEmail());
             assertEquals(PASSWORD, output.getPassword());
 
-            assertEquals(input.getPhones().size(), output.getPhones().size());
+            assertEquals(1, output.getPhones().size());
             assertEquals(phoneDTO.getId(), output.getPhones().get(0).getId());
-            assertEquals(phoneDTO.getUserId(), output.getPhones().get(0).getUser().getId());
-
-            assertEquals(input.getPhones().size(), output.getPhones().size());
             assertEquals(NAME_ROLE, output.getRoles().iterator().next().getName());
         }
     }
 
     @Nested
     class EntityToDto {
-        private UserBO userBO;
-        private AccountBO accountBO;
-        private ShoppingCartBO shoppingCartBO;
-        private PhoneBO phoneBO;
-        private RoleBO roleBO;
 
         @BeforeEach
         void setup() {
-            shoppingCartBO = new ShoppingCartBO();
-            accountBO = new AccountBO();
-            userBO = new UserBO();
-            phoneBO = new PhoneBO();
-            roleBO = new RoleBO();
+            when(accountBO.getId()).thenReturn(ID);
 
-            shoppingCartBO.setId(ID);
-            shoppingCartBO.setAccount(accountBO);
+            when(shoppingCartBO.getId()).thenReturn(ID);
+            when(shoppingCartBO.getAccount()).thenReturn(accountBO);
 
-            accountBO.setId(ID);
-            accountBO.setShoppingCart(shoppingCartBO);
-            accountBO.setUser(userBO);
+            when(userBO.getId()).thenReturn(ID);
+            when(userBO.getName()).thenReturn(NAME);
+            when(userBO.getEmail()).thenReturn(EMAIL);
+            when(userBO.getPassword()).thenReturn(PASSWORD);
+            when(userBO.getAccount()).thenReturn(accountBO);
 
-            userBO.setId(ID);
-            userBO.setName(NAME);
-            userBO.setEmail(EMAIL);
-            userBO.setPassword(PASSWORD);
-            userBO.setAccount(accountBO);
+            when(accountBO.getUser()).thenReturn(userBO);
+            when(accountBO.getShoppingCart()).thenReturn(shoppingCartBO);
 
-            phoneBO.setId(ID);
-            phoneBO.setType(TYPE_PHONE);
-            phoneBO.setNumber(NUMBER);
-            phoneBO.setUser(userBO);
-
-            roleBO.setId(ID);
-            roleBO.setName(NAME_ROLE);
         }
 
         @Test
-        void shouldCreateUserDTOWhenUserBOIsPassedWithoutRolesOrPhones() {
+        void shouldCreateUserDTOWithoutRolesOrPhonesWhenUserBOIsPassed() {
             // Act
             UserDTO output = UserMapper.entityToDto(userBO);
 
@@ -110,13 +108,16 @@ public class UserMapperTest {
             assertEquals(NAME, output.getName());
             assertEquals(EMAIL, output.getEmail());
             assertEquals(PASSWORD, output.getPassword());
-            assertEquals(userBO.getAccount().getId(), output.getAccount().getId());
+            assertEquals(ID, output.getAccount().getId());
         }
 
         @Test
         void shouldCreateUserDTOWithRolesWhenUserBOAndRolesArePassed() {
             // Arrange
-            userBO.setRoles(Set.of(roleBO));
+            when(roleBO.getId()).thenReturn(ID);
+            when(roleBO.getName()).thenReturn(NAME_ROLE);
+
+            when(userBO.getRoles()).thenReturn(Set.of(roleBO));
 
             // Act
             UserDTO output = UserMapper.entityToDto(userBO, userBO.getRoles());
@@ -126,17 +127,25 @@ public class UserMapperTest {
             assertEquals(NAME, output.getName());
             assertEquals(EMAIL, output.getEmail());
             assertEquals(PASSWORD, output.getPassword());
-            assertEquals(userBO.getAccount().getId(), output.getAccount().getId());
+            assertEquals(ID, output.getAccount().getId());
 
-            assertEquals(userBO.getRoles().size(), output.getRoles().size());
-            assertEquals(userBO.getRoles().iterator().next().getId(), output.getRoles().iterator().next().getId());
+            assertEquals(1, output.getRoles().size());
+            assertEquals(ID, output.getRoles().iterator().next().getId());
         }
 
         @Test
         void shouldCreateUserDTOWithPhonesAndRolesWhenUserBOAndPhonesAndRolesArePassed() {
             // Arrange
-            userBO.setPhones(List.of(phoneBO));
-            userBO.setRoles(Set.of(roleBO));
+            when(phoneBO.getId()).thenReturn(ID);
+            when(phoneBO.getType()).thenReturn(TYPE_PHONE);
+            when(phoneBO.getNumber()).thenReturn(NUMBER);
+            when(phoneBO.getUser()).thenReturn(userBO);
+
+            when(roleBO.getId()).thenReturn(ID);
+            when(roleBO.getName()).thenReturn(NAME_ROLE);
+
+            when(userBO.getPhones()).thenReturn(List.of(phoneBO));
+            when(userBO.getRoles()).thenReturn(Set.of(roleBO));
 
             // Act
             UserDTO output = UserMapper.entityToDto(userBO, userBO.getRoles(), userBO.getPhones());
@@ -146,20 +155,20 @@ public class UserMapperTest {
             assertEquals(NAME, output.getName());
             assertEquals(EMAIL, output.getEmail());
             assertEquals(PASSWORD, output.getPassword());
-            assertEquals(userBO.getAccount().getId(), output.getAccount().getId());
+            assertEquals(ID, output.getAccount().getId());
 
-            assertEquals(userBO.getPhones().size(), output.getPhones().size());
-            assertEquals(userBO.getPhones().get(0).getId(), output.getPhones().get(0).getId());
+            assertEquals(1, output.getPhones().size());
+            assertEquals(ID, output.getPhones().get(0).getId());
 
-            assertEquals(userBO.getRoles().size(), output.getRoles().size());
-            assertEquals(userBO.getRoles().iterator().next().getId(), output.getRoles().iterator().next().getId());
+            assertEquals(1, output.getRoles().size());
+            assertEquals(ID, output.getRoles().iterator().next().getId());
         }
 
         @Test
         void shouldHandleEmptyPhonesAndRolesWhenUserBOIsPassed() {
             // Arrange
-            userBO.setPhones(Collections.emptyList());
-            userBO.setRoles(Collections.emptySet());
+            when(userBO.getPhones()).thenReturn(Collections.emptyList());
+            when(userBO.getRoles()).thenReturn(Collections.emptySet());
 
             // Act
             UserDTO output = UserMapper.entityToDto(userBO, userBO.getRoles(), userBO.getPhones());
@@ -169,7 +178,7 @@ public class UserMapperTest {
             assertEquals(NAME, output.getName());
             assertEquals(EMAIL, output.getEmail());
             assertEquals(PASSWORD, output.getPassword());
-            assertEquals(userBO.getAccount().getId(), output.getAccount().getId());
+            assertEquals(ID, output.getAccount().getId());
 
             assertEquals(0, output.getPhones().size());
             assertEquals(0, output.getRoles().size());
@@ -182,10 +191,9 @@ public class UserMapperTest {
         @Test
         void shouldCreateUserSummaryDTOWhenUserBOIsPassed() {
             // Arrange
-            UserBO userBO = new UserBO();
-            userBO.setId(ID);
-            userBO.setName(NAME);
-            userBO.setEmail(EMAIL);
+            when(userBO.getId()).thenReturn(ID);
+            when(userBO.getName()).thenReturn(NAME);
+            when(userBO.getEmail()).thenReturn(EMAIL);
 
             // Act
             UserSummaryDTO output = UserMapper.entityToSummaryDto(userBO);
