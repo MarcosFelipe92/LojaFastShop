@@ -28,7 +28,7 @@ public class AuthService {
     private final JwtEncoder jwtEncoder;
 
     public LoginResponseDTO login(LoginRequestDTO request) {
-        UserBO user = userRepository.findByEmail(request.getEmail());
+        UserBO user = userRepository.findByEmail(request.getEmail()).get();
 
         if (user == null || !user.isLoginCorrect(request, passwordEncoder)) {
             throw new BadCredentialsException("User or password is invalid");

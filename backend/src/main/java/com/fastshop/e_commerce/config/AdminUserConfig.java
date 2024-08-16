@@ -30,17 +30,16 @@ public class AdminUserConfig implements CommandLineRunner {
 
         RoleBO roleAdmin = roleRepository.findByName(RoleBO.getAdminRole()).get();
 
-        UserBO userAdmin = userRepository.findByEmail("admin@gmail.com");
-
-        if (userAdmin != null) {
+        userRepository.findByEmail("admin@gmail.com").ifPresent(user -> {
             System.out.println("admin ja existe");
-        } else {
-            UserBO user = new UserBO();
-            user.setEmail("admin@gmail.com");
-            user.setPassword(passwordEncoder.encode("123"));
-            user.setRoles(Set.of(roleAdmin));
-            userRepository.save(user);
-        }
+            return;
+        });
+
+        UserBO user = new UserBO();
+        user.setEmail("admin@gmail.com");
+        user.setPassword(passwordEncoder.encode("123"));
+        user.setRoles(Set.of(roleAdmin));
+        userRepository.save(user);
 
     }
 }

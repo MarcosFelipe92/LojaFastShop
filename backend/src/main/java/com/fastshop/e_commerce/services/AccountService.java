@@ -94,20 +94,4 @@ public class AccountService {
                     "You are not allowed to remove an address to an account that does not belong to you.");
         }
     }
-
-    // @Transactional
-    // public AccountDTO update(AccountDTO dto, Long id) {
-    // try {
-    // AccountBO account = repository.getReferenceById(id);
-    // ShoppingCartBO shoppingCartBO = ShoppingCartMapper
-    // .dtoToEntity(shoppingCartService.findById(dto.getShoppingCart().getId()),
-    // account);
-    // UserBO user = UserMapper.dtoToEntity(userService.findById(dto.getUserId()));
-    // account.setShoppingCart(shoppingCartBO);
-    // account.setUser(user);
-    // return new AccountDTO(repository.save(account));
-    // } catch (EntityNotFoundException e) {
-    // throw new ResourceNotFoundException("id " + id + " not found");
-    // }
-    // }
 }

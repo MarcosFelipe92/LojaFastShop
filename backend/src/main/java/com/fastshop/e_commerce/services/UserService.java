@@ -38,27 +38,25 @@ public class UserService {
     }
 
     public UserDTO findById(Long id, JwtAuthenticationToken token) {
-        UserBO entity = repository.findById(id).orElseThrow(() -> new NotFoundException("User not found"));
+        UserBO entity = repository.findById(id).orElseThrow(() -> new NotFoundException("User not found."));
         if (authService.validateUserPermission(token, id)) {
             return UserMapper.entityToDto(entity, entity.getRoles(), entity.getPhones());
         } else {
             throw new AccessDeniedException(
-                    "You are not allowed to modify to an user that does not you.");
+                    "You are not allowed to access to an user that does not you.");
         }
     }
 
     public UserDTO findByEmail(String email) {
-        UserBO entity = repository.findByEmail(email);
+        UserBO entity = repository.findByEmail(email).orElseThrow(() -> new NotFoundException("User not found."));
         return UserMapper.entityToDto(entity, entity.getRoles());
     }
 
     @Transactional
     public UserDTO create(UserDTO dto) {
-        UserBO userExists = repository.findByEmail(dto.getEmail());
-        if (userExists != null) {
-            throw new InvalidEmailException("Email already registered");
-        }
-        ;
+        repository.findByEmail(dto.getEmail()).ifPresent(user -> {
+            throw new InvalidEmailException("Email already registered.");
+        });
 
         RoleBO basicRole = roleService.findByName(RoleBO.getBasicRole());
 
@@ -80,7 +78,7 @@ public class UserService {
 
     @Transactional
     public UserDTO update(UserDTO dto, Long id, JwtAuthenticationToken token) {
-        UserBO userUpdated = repository.findById(id).orElseThrow(() -> new NotFoundException("User not found"));
+        UserBO userUpdated = repository.findById(id).orElseThrow(() -> new NotFoundException("User not found."));
         if (authService.validateUserPermission(token, id)) {
             AccountBO account = userUpdated.getAccount();
             UserMapper.copyAttributes(dto, userUpdated, account);
@@ -95,7 +93,7 @@ public class UserService {
 
     @Transactional
     public void delete(Long id, JwtAuthenticationToken token) {
-        repository.findById(id).orElseThrow(() -> new NotFoundException("User not found"));
+        repository.findById(id).orElseThrow(() -> new NotFoundException("User not found."));
         if (authService.validateUserPermission(token, id)) {
             repository.deleteById(id);
         } else {

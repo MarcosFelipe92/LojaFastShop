@@ -81,7 +81,6 @@ public class UserMapper {
     public static void copyAttributes(UserDTO dto, UserBO entity, AccountBO account) {
         entity.setName(dto.getName());
         entity.setEmail(dto.getEmail());
-        entity.setPassword(dto.getPassword());
         entity.setAccount(account);
 
         List<PhoneBO> updatedPhones = dto.getPhones().stream()
