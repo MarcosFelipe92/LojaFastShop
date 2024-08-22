@@ -1,6 +1,6 @@
 export function Navbar() {
   return (
-    <div className="flex items-center justify-between w-full max-w-4xl mx-auto">
+    <div className="flex items-center justify-between w-full max-w-4xl mx-auto text-white">
       <ul className="flex items-center gap-8">
         <li>
           <a href="">Categorias</a>

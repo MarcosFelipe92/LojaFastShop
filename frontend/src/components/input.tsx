@@ -24,7 +24,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
     return (
       <div className={className}>
         {label && <label htmlFor={labelId}>{label}</label>}
-        <div className="flex items-center p-2 gap-3 border border-gray-300 rounded-lg focus-within:border-gray-500 focus-within:outline focus-within:outline-2 focus-within:outline-gray-500">
+        <div className="flex items-center p-2 gap-3 border border-amber-300 rounded-lg focus-within:border-amber-500 focus-within:outline focus-within:outline-2 focus-within:outline-amber-500">
           {startAdornment && <span>{startAdornment}</span>}
           <input
             ref={ref}

@@ -10,7 +10,7 @@ export function Header() {
         <div>
           <a href="/">
             <Image
-              src={"/images/logo.png"}
+              src={"/images/logo2.png"}
               width={100}
               height={100}
               alt="Logo"
@@ -19,7 +19,10 @@ export function Header() {
         </div>
         <div className="flex-1">
           <form>
-            <Input startAdornment={<FaUser />} placeholder="Pesquisar" />
+            <Input
+              startAdornment={<FaUser className="text-white" />}
+              placeholder="Pesquisar"
+            />
           </form>
         </div>
       </div>
