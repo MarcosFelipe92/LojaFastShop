@@ -31,7 +31,7 @@ public class AddressService {
     }
 
     @Transactional
-    public AddressDTO insert(AddressDTO dto, AccountBO account) {
+    public AddressDTO create(AddressDTO dto, AccountBO account) {
         AddressBO address = AddressMapper.dtoToEntity(dto, account);
 
         address = repository.save(address);

@@ -46,7 +46,7 @@ public class AccountService {
     }
 
     @Transactional
-    public AccountDTO insert(AccountDTO dto, UserDTO user) {
+    public AccountDTO create(AccountDTO dto, UserDTO user) {
         AccountBO entity = new AccountBO();
 
         entity = repository.save(entity);

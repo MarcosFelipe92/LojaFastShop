@@ -65,4 +65,14 @@ public class AuthService {
         return false;
     }
 
+    public boolean validateUserPermission(JwtAuthenticationToken token) {
+        UserBO requestUser = userRepository.findById(Long.parseLong(token.getName())).get();
+        boolean isAdmin = requestUser.hasRole(RoleBO.getAdminRole());
+
+        if (isAdmin) {
+            return true;
+        }
+        return false;
+    }
+
 }

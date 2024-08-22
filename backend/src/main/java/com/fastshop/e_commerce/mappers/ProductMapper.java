@@ -23,4 +23,10 @@ public class ProductMapper {
 
         return new ProductDTO(id, name, description, price);
     }
+
+    public static void copyAttributes(ProductBO entity, ProductDTO dto) {
+        entity.setName(dto.getName());
+        entity.setDescription(dto.getDescription());
+        entity.setPrice(dto.getPrice());
+    }
 }
