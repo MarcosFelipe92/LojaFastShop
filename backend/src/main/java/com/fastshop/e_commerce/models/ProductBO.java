@@ -1,5 +1,6 @@
 package com.fastshop.e_commerce.models;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -24,4 +25,7 @@ public class ProductBO {
     private String name;
     private String description;
     private Double price;
+
+    @Column(nullable = true)
+    private String image;
 }

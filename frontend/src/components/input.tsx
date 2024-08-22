@@ -1,3 +1,4 @@
+import { cn } from "@/lib/utils";
 import { forwardRef, InputHTMLAttributes, ReactNode, useId } from "react";
 
 type InputProps = {
@@ -24,7 +25,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
     return (
       <div className={className}>
         {label && <label htmlFor={labelId}>{label}</label>}
-        <div className="flex items-center p-2 gap-3 border border-amber-300 rounded-lg focus-within:border-amber-500 focus-within:outline focus-within:outline-2 focus-within:outline-amber-500">
+        <div className={cn("flex items-center p-2 gap-3 border", className)}>
           {startAdornment && <span>{startAdornment}</span>}
           <input
             ref={ref}

@@ -11,6 +11,9 @@ public class ProductMapper {
         entity.setName(dto.getName());
         entity.setDescription(dto.getDescription());
         entity.setPrice(dto.getPrice());
+        if (dto.getImage() != null) {
+            entity.setImage(dto.getImage());
+        }
 
         return entity;
     }
@@ -20,13 +23,18 @@ public class ProductMapper {
         String name = entity.getName();
         String description = entity.getDescription();
         Double price = entity.getPrice();
+        String image = entity.getImage() != null ? entity.getImage() : null;
 
-        return new ProductDTO(id, name, description, price);
+        return new ProductDTO(id, name, description, price, image);
     }
 
     public static void copyAttributes(ProductBO entity, ProductDTO dto) {
         entity.setName(dto.getName());
         entity.setDescription(dto.getDescription());
         entity.setPrice(dto.getPrice());
+
+        if (dto.getImage() != null) {
+            entity.setImage(dto.getImage());
+        }
     }
 }
