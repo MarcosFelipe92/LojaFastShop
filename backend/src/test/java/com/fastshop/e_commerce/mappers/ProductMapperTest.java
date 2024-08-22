@@ -135,8 +135,8 @@ public class ProductMapperTest {
         @Test
         void shouldNotOverrideExistenceImageWhenProductDTOWithoutImageIsPassed() {
             // Arrange
-            ProductBO entity = new ProductBO(ID, NAME, DESCRIPTION, PRICE, IMAGE); // Entidade já com uma imagem
-            ProductDTO dto = new ProductDTO(ID, NAME, DESCRIPTION, PRICE, null); // DTO sem imagem
+            ProductBO entity = new ProductBO(ID, NAME, DESCRIPTION, PRICE, IMAGE);
+            ProductDTO dto = new ProductDTO(ID, NAME, DESCRIPTION, PRICE, null);
 
             // Act
             ProductMapper.copyAttributes(entity, dto);
@@ -145,7 +145,7 @@ public class ProductMapperTest {
             assertEquals(NAME, entity.getName());
             assertEquals(DESCRIPTION, entity.getDescription());
             assertEquals(PRICE, entity.getPrice());
-            assertEquals(IMAGE, entity.getImage()); // A imagem original não deve ser sobrescrita
+            assertEquals(IMAGE, entity.getImage());
         }
     }
 }
