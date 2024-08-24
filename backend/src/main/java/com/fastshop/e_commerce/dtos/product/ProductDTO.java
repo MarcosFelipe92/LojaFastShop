@@ -12,5 +12,5 @@ public class ProductDTO {
     private String name;
     private String description;
     private Double price;
-    private String image;
+    private Byte[] image;
 }

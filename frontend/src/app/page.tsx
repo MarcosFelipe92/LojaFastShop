@@ -1,117 +1,38 @@
+import { getAllProducts } from "@/actions/product/productService";
 import { Container } from "@/components/container";
 import { Header } from "@/components/header";
 import { CardProduct } from "@/components/home/CardProduct";
 import Image from "next/image";
+import Link from "next/link";
 
-export default function Home() {
+async function getData() {
+  const products = await getAllProducts();
+  return products;
+}
+
+export default async function Home() {
+  const products = await getData();
+
   return (
     <Container>
       <Header />
-      <div className="flex flex-wrap justify-center mt-5">
-        <CardProduct name="Produto 1" price={"25.50"}>
-          <Image
-            src="/images/produto1.jpg"
-            width={150}
-            height={150}
-            alt="Produto 1"
-          />
-        </CardProduct>
-        <CardProduct name="Produto 1" price={"25.50"}>
-          <Image
-            src="/images/produto1.jpg"
-            width={150}
-            height={150}
-            alt="Produto 1"
-          />
-        </CardProduct>
-        <CardProduct name="Produto 1" price={"25.50"}>
-          <Image
-            src="/images/produto1.jpg"
-            width={150}
-            height={150}
-            alt="Produto 1"
-          />
-        </CardProduct>
-        <CardProduct name="Produto 1" price={"25.50"}>
-          <Image
-            src="/images/produto1.jpg"
-            width={150}
-            height={150}
-            alt="Produto 1"
-          />
-        </CardProduct>
-        <CardProduct name="Produto 1" price={"25.50"}>
-          <Image
-            src="/images/produto1.jpg"
-            width={150}
-            height={150}
-            alt="Produto 1"
-          />
-        </CardProduct>
-        <CardProduct name="Produto 1" price={"25.50"}>
-          <Image
-            src="/images/produto1.jpg"
-            width={150}
-            height={150}
-            alt="Produto 1"
-          />
-        </CardProduct>
-        <CardProduct name="Produto 1" price={"25.50"}>
-          <Image
-            src="/images/produto1.jpg"
-            width={150}
-            height={150}
-            alt="Produto 1"
-          />
-        </CardProduct>
-        <CardProduct name="Produto 1" price={"25.50"}>
-          <Image
-            src="/images/produto1.jpg"
-            width={150}
-            height={150}
-            alt="Produto 1"
-          />
-        </CardProduct>
-        <CardProduct name="Produto 1" price={"25.50"}>
-          <Image
-            src="/images/produto1.jpg"
-            width={150}
-            height={150}
-            alt="Produto 1"
-          />
-        </CardProduct>
-        <CardProduct name="Produto 1" price={"25.50"}>
-          <Image
-            src="/images/produto1.jpg"
-            width={150}
-            height={150}
-            alt="Produto 1"
-          />
-        </CardProduct>
-        <CardProduct name="Produto 1" price={"25.50"}>
-          <Image
-            src="/images/produto1.jpg"
-            width={150}
-            height={150}
-            alt="Produto 1"
-          />
-        </CardProduct>
-        <CardProduct name="Produto 1" price={"25.50"}>
-          <Image
-            src="/images/produto1.jpg"
-            width={150}
-            height={150}
-            alt="Produto 1"
-          />
-        </CardProduct>
-        <CardProduct name="Produto 1" price={"25.50"}>
-          <Image
-            src="/images/produto1.jpg"
-            width={150}
-            height={150}
-            alt="Produto 1"
-          />
-        </CardProduct>
+      <div className="flex flex-wrap justify-center gap-8 mt-5">
+        {products.map((product) => (
+          <CardProduct
+            key={product.id}
+            name={product.name}
+            price={product.price.toString()}
+          >
+            <Link href={`products/${product.id}`}>
+              <Image
+                src="/images/produto1.jpg"
+                width={150}
+                height={150}
+                alt="Produto 1"
+              />
+            </Link>
+          </CardProduct>
+        ))}
       </div>
     </Container>
   );
