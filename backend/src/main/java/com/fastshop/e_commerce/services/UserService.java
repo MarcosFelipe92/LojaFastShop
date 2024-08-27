@@ -55,7 +55,7 @@ public class UserService {
     @Transactional
     public UserDTO create(UserDTO dto) {
         repository.findByEmail(dto.getEmail()).ifPresent(user -> {
-            throw new InvalidEmailException("Email already registered.");
+            throw new InvalidEmailException("Email Já existe.");
         });
 
         RoleBO basicRole = roleService.findByName(RoleBO.getBasicRole());

@@ -7,7 +7,7 @@ import Link from "next/link";
 export function Header() {
   return (
     <div className="flex flex-col gap-5 w-full">
-      <div className="flex items items-center gap-5 w-full max-w-6xl justify-between">
+      <div className="flex items items-center gap-5 w-full max-w-6xl justify-between mx-auto">
         <div>
           <Link href="/">
             <Image src={"/images/logo.png"} width={70} height={70} alt="Logo" />

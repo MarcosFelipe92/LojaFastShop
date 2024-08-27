@@ -8,6 +8,7 @@ import {
 } from "@/components/ui/card";
 import { Header } from "@/components/auth/header";
 import { BackButton } from "@/components/auth/back-button";
+import { cn } from "@/lib/utils";
 
 interface CardWrapperProps {
   children: React.ReactNode;
@@ -15,6 +16,7 @@ interface CardWrapperProps {
   backButtonLabel: string;
   backButtonHref: string;
   showSocial?: boolean;
+  variant?: "login" | "register";
 }
 
 export function CardWrapper({
@@ -22,10 +24,16 @@ export function CardWrapper({
   headerLabel,
   backButtonHref,
   backButtonLabel,
+  variant = "login",
 }: CardWrapperProps) {
   return (
     <div>
-      <Card className="w-[400px] shadow-md">
+      <Card
+        className={cn(
+          "shadow-md",
+          variant == "register" ? "w-[550px]" : "w-[400px]"
+        )}
+      >
         <CardHeader>
           <Header label={headerLabel} />
         </CardHeader>

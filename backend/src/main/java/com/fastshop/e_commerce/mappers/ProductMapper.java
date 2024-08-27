@@ -23,7 +23,7 @@ public class ProductMapper {
         String name = entity.getName();
         String description = entity.getDescription();
         Double price = entity.getPrice();
-        Byte[] image = entity.getImage() != null ? entity.getImage() : null;
+        String image = entity.getImage() != null ? entity.getImage() : null;
 
         return new ProductDTO(id, name, description, price, image);
     }

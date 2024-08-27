@@ -1,7 +1,7 @@
 import { getAllProducts } from "@/actions/product/productService";
 import { Container } from "@/components/container";
 import { Header } from "@/components/header";
-import { CardProduct } from "@/components/home/CardProduct";
+import { SimpleCardProduct } from "@/components/simple-card-product";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -18,7 +18,7 @@ export default async function Home() {
       <Header />
       <div className="flex flex-wrap justify-center gap-8 mt-5">
         {products.map((product) => (
-          <CardProduct
+          <SimpleCardProduct
             key={product.id}
             name={product.name}
             price={product.price.toString()}
@@ -31,7 +31,7 @@ export default async function Home() {
                 alt="Produto 1"
               />
             </Link>
-          </CardProduct>
+          </SimpleCardProduct>
         ))}
       </div>
     </Container>

@@ -19,6 +19,8 @@ import com.fastshop.e_commerce.dtos.user.UserDTO;
 import com.fastshop.e_commerce.dtos.user.UserSummaryDTO;
 import com.fastshop.e_commerce.services.UserService;
 
+import jakarta.validation.Valid;
+
 @RestController
 @RequestMapping("/users")
 public class UserController {
@@ -39,7 +41,7 @@ public class UserController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<UserDTO> register(@RequestBody UserDTO dto) {
+    public ResponseEntity<UserDTO> register(@Valid @RequestBody UserDTO dto) {
         UserDTO obj = service.create(dto);
         return ResponseEntity.ok().body(obj);
     }

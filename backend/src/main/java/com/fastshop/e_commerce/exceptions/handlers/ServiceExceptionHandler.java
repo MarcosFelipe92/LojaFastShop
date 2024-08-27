@@ -7,7 +7,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import com.fastshop.e_commerce.exceptions.StandardError;
 import com.fastshop.e_commerce.exceptions.service.DatabaseException;
@@ -16,7 +15,7 @@ import com.fastshop.e_commerce.exceptions.service.InvalidEmailException;
 import jakarta.servlet.http.HttpServletRequest;
 
 @ControllerAdvice
-public class ServiceExceptionHandler extends ResponseEntityExceptionHandler {
+public class ServiceExceptionHandler {
 
     @ExceptionHandler(DatabaseException.class)
     private ResponseEntity<StandardError> database(DatabaseException ex, HttpServletRequest request) {

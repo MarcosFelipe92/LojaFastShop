@@ -8,14 +8,13 @@ import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import com.fastshop.e_commerce.exceptions.StandardError;
 
 import jakarta.servlet.http.HttpServletRequest;
 
 @ControllerAdvice
-public class AuthExceptionHandler extends ResponseEntityExceptionHandler {
+public class AuthExceptionHandler {
 
         @ExceptionHandler(BadCredentialsException.class)
         private ResponseEntity<StandardError> badCredentials(BadCredentialsException ex, HttpServletRequest request) {

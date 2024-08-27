@@ -1,6 +1,6 @@
 "use client";
 
-import { login } from "@/actions/login";
+import { login } from "@/actions/auth/login";
 import { loginSchema } from "@/schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useState, useTransition } from "react";
@@ -65,7 +65,7 @@ export default function FormLogin() {
                     <Input
                       {...field}
                       disabled={isPending}
-                      placeholder="example@gmail.com"
+                      placeholder="exemplo@gmail.com"
                       type="email"
                     />
                   </FormControl>
@@ -80,7 +80,7 @@ export default function FormLogin() {
               name="password"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Password</FormLabel>
+                  <FormLabel>Senha</FormLabel>
                   <FormControl>
                     <Input
                       {...field}
@@ -97,7 +97,7 @@ export default function FormLogin() {
           <FormError message={error} />
           <FormSuccess message={success} />
           <Button type="submit" disabled={isPending} className="w-full ">
-            Login
+            Entrar
           </Button>
         </form>
       </Form>

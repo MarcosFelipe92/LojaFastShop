@@ -19,14 +19,9 @@ import { Input } from "../input";
 import FormError from "./form-error";
 import FormSuccess from "./form-sucess";
 import { Button } from "../ui/button";
+import { register } from "@/actions/auth/register";
 
 export default function FormRegister() {
-  const searchParams = useSearchParams();
-  const urlError =
-    searchParams.get("error") == "OAuthAccountNotLinked"
-      ? "Email already in use with different provider!"
-      : "";
-
   const [isPending, startTransition] = useTransition();
   const [error, setError] = useState<string | undefined>("");
   const [success, setSuccess] = useState<string | undefined>("");
@@ -35,8 +30,10 @@ export default function FormRegister() {
     resolver: zodResolver(registerSchema),
     mode: "all",
     defaultValues: {
+      name: "",
       email: "",
       password: "",
+      phones: [{ number: "", type: "" }],
     },
   });
 
@@ -45,10 +42,32 @@ export default function FormRegister() {
     setSuccess("");
 
     startTransition(() => {
-      //   login(values).then((data) => {
-      //     setError(data?.error);
-      //   });
+      register(values).then((data) => {
+        if (data?.error) {
+          setError(data.error);
+        } else if (data?.success) {
+          setSuccess(data.success);
+        }
+      });
     });
+  };
+
+  const addPhone = () => {
+    form.setValue("phones", [
+      ...form.getValues("phones"),
+      { number: "", type: "" },
+    ]);
+  };
+
+  const removePhone = (index: number) => {
+    const phones = form.getValues("phones");
+
+    if (phones.length > 1) {
+      phones.splice(index, 1);
+      form.setValue("phones", phones);
+    } else {
+      setError("Você deve adicionar pelo menos um telefone.");
+    }
   };
 
   return (
@@ -56,7 +75,7 @@ export default function FormRegister() {
       headerLabel="Crie uma conta!"
       backButtonLabel="Já tem uma conta?"
       backButtonHref="/auth/login"
-      showSocial
+      variant="register"
     >
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
@@ -67,12 +86,12 @@ export default function FormRegister() {
               name="name"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Password</FormLabel>
+                  <FormLabel>Nome</FormLabel>
                   <FormControl>
                     <Input
                       {...field}
                       disabled={isPending}
-                      placeholder="******"
+                      placeholder="João da Silva"
                       type="text"
                     />
                   </FormControl>
@@ -91,7 +110,7 @@ export default function FormRegister() {
                     <Input
                       {...field}
                       disabled={isPending}
-                      placeholder="example@gmail.com"
+                      placeholder="exemplo@gmail.com"
                       type="email"
                     />
                   </FormControl>
@@ -106,7 +125,7 @@ export default function FormRegister() {
               name="password"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Password</FormLabel>
+                  <FormLabel>Senha</FormLabel>
                   <FormControl>
                     <Input
                       {...field}
@@ -119,11 +138,62 @@ export default function FormRegister() {
                 </FormItem>
               )}
             />
+            {form.watch("phones").map((_, index) => (
+              <div key={index} className="flex items-end gap-2">
+                <FormField
+                  control={form.control}
+                  name={`phones.${index}.number`}
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Número de Telefone</FormLabel>
+                      <FormControl>
+                        <Input
+                          {...field}
+                          disabled={isPending}
+                          placeholder="(11) 91234-5678"
+                          type="text"
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name={`phones.${index}.type`}
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Tipo</FormLabel>
+                      <FormControl>
+                        <Input
+                          {...field}
+                          disabled={isPending}
+                          placeholder="Casa, Trabalho, etc."
+                          type="text"
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <Button
+                  type="button"
+                  onClick={() => removePhone(index)}
+                  disabled={isPending}
+                  className="mb-1"
+                >
+                  Remover
+                </Button>
+              </div>
+            ))}
+            <Button type="button" onClick={addPhone} disabled={isPending}>
+              Adicionar Telefone
+            </Button>
           </div>
-          <FormError message={error || urlError} />
+          <FormError message={error} />
           <FormSuccess message={success} />
           <Button type="submit" disabled={isPending} className="w-full">
-            Login
+            Registrar
           </Button>
         </form>
       </Form>
