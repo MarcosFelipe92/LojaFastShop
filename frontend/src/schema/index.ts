@@ -6,9 +6,7 @@ export const loginSchema = z.object({
 });
 
 const phoneSchema = z.object({
-  number: z
-    .string()
-    .min(11, "O número de telefone deve ter pelo menos 10 dígitos"),
+  number: z.string().min(13, "Digite um número de telefone válido"),
   type: z.string().min(3, "O tipo deve ter pelo menos 3 caracteres"),
 });
 

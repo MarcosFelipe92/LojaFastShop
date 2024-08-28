@@ -31,7 +31,7 @@ export function CardWrapper({
       <Card
         className={cn(
           "shadow-md",
-          variant == "register" ? "w-[550px]" : "w-[400px]"
+          variant == "register" ? "w-[600px]" : "w-[400px]"
         )}
       >
         <CardHeader>

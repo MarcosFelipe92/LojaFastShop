@@ -1,12 +1,19 @@
 "use client";
 
+import { register } from "@/actions/auth/register";
+import { formatPhoneNumber } from "@/lib/utils";
 import { registerSchema } from "@/schema";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useSearchParams } from "next/navigation";
 import { useState, useTransition } from "react";
 import { useForm } from "react-hook-form";
+import { FaRegUser } from "react-icons/fa";
+import { FiPhone } from "react-icons/fi";
+import { IoIosPhonePortrait } from "react-icons/io";
+import { MdAlternateEmail } from "react-icons/md";
+import { PiPassword } from "react-icons/pi";
 import { z } from "zod";
-import { CardWrapper } from "./card-wrapper";
+import { Input } from "../input";
+import { Button } from "../ui/button";
 import {
   Form,
   FormControl,
@@ -15,11 +22,9 @@ import {
   FormLabel,
   FormMessage,
 } from "../ui/form";
-import { Input } from "../input";
+import { CardWrapper } from "./card-wrapper";
 import FormError from "./form-error";
 import FormSuccess from "./form-sucess";
-import { Button } from "../ui/button";
-import { register } from "@/actions/auth/register";
 
 export default function FormRegister() {
   const [isPending, startTransition] = useTransition();
@@ -93,6 +98,8 @@ export default function FormRegister() {
                       disabled={isPending}
                       placeholder="João da Silva"
                       type="text"
+                      startAdornment={<FaRegUser />}
+                      className="border-gray-300 rounded-lg focus-within:border-gray-500 focus-within:outline focus-within:outline-2 focus-within:outline-gray-500"
                     />
                   </FormControl>
                   <FormMessage />
@@ -112,6 +119,8 @@ export default function FormRegister() {
                       disabled={isPending}
                       placeholder="exemplo@gmail.com"
                       type="email"
+                      startAdornment={<MdAlternateEmail />}
+                      className="border-gray-300 rounded-lg focus-within:border-gray-500 focus-within:outline focus-within:outline-2 focus-within:outline-gray-500"
                     />
                   </FormControl>
                   <FormMessage />
@@ -130,8 +139,10 @@ export default function FormRegister() {
                     <Input
                       {...field}
                       disabled={isPending}
-                      placeholder="******"
+                      placeholder="Xy123456"
                       type="password"
+                      startAdornment={<PiPassword />}
+                      className="border-gray-300 rounded-lg focus-within:border-gray-500 focus-within:outline focus-within:outline-2 focus-within:outline-gray-500"
                     />
                   </FormControl>
                   <FormMessage />
@@ -148,13 +159,15 @@ export default function FormRegister() {
                       <FormLabel>Número de Telefone</FormLabel>
                       <FormControl>
                         <Input
-                          {...field}
+                          value={formatPhoneNumber(field.value)}
+                          onChange={(e) => field.onChange(e.target.value)}
                           disabled={isPending}
-                          placeholder="(11) 91234-5678"
+                          placeholder="11 91234-5678"
                           type="text"
+                          startAdornment={<FiPhone />}
+                          className="border-gray-300 rounded-lg focus-within:border-gray-500 focus-within:outline focus-within:outline-2 focus-within:outline-gray-500"
                         />
                       </FormControl>
-                      <FormMessage />
                     </FormItem>
                   )}
                 />
@@ -170,9 +183,10 @@ export default function FormRegister() {
                           disabled={isPending}
                           placeholder="Casa, Trabalho, etc."
                           type="text"
+                          startAdornment={<IoIosPhonePortrait />}
+                          className="border-gray-300 rounded-lg focus-within:border-gray-500 focus-within:outline focus-within:outline-2 focus-within:outline-gray-500"
                         />
                       </FormControl>
-                      <FormMessage />
                     </FormItem>
                   )}
                 />

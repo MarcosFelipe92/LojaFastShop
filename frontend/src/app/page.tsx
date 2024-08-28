@@ -1,7 +1,7 @@
 import { getAllProducts } from "@/actions/product/productService";
 import { Container } from "@/components/container";
 import { Header } from "@/components/header";
-import { SimpleCardProduct } from "@/components/simple-card-product";
+import { SimpleCardProduct } from "@/components/product/simple-card-product";
 import Image from "next/image";
 import Link from "next/link";
 
