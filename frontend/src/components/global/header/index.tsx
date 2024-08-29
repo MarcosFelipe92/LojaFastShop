@@ -1,28 +1,17 @@
-import { Input } from "@/components/global/input";
-import Image from "next/image";
-import Link from "next/link";
-import { FaUser } from "react-icons/fa";
-import { Navbar } from "../navbar";
+import { HeaderTop } from "@/components/global/header/headerTop";
+import { HeaderLogo } from "@/components/global/header/headerLogo";
+import { HeaderSearchBar } from "@/components/global/header/headerSearchBar";
+import { Navbar } from "@/components/global/navbar";
 
 export function Header() {
   return (
     <div className="flex flex-col gap-5 w-full">
-      <div className="flex items items-center gap-5 w-full max-w-6xl justify-between mx-auto">
-        <div>
-          <Link href="/">
-            <Image src={"/images/logo.png"} width={70} height={70} alt="Logo" />
-          </Link>
-        </div>
+      <HeaderTop>
+        <HeaderLogo />
         <div className="flex-1">
-          <form>
-            <Input
-              startAdornment={<FaUser />}
-              placeholder="Pesquisar"
-              className="border-lime-300 rounded-lg focus-within:border-lime-500 focus-within:outline focus-within:outline-2 focus-within:outline-lime-500"
-            />
-          </form>
+          <HeaderSearchBar />
         </div>
-      </div>
+      </HeaderTop>
       <Navbar />
     </div>
   );
