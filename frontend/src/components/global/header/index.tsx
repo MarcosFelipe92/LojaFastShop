@@ -1,8 +1,8 @@
-import Image from "next/image";
-import { Navbar } from "@/components/global/navbar";
 import { Input } from "@/components/global/input";
-import { FaUser } from "react-icons/fa";
+import Image from "next/image";
 import Link from "next/link";
+import { FaUser } from "react-icons/fa";
+import { Navbar } from "../navbar";
 
 export function Header() {
   return (

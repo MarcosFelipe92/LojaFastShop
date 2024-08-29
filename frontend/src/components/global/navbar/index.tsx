@@ -1,49 +1,31 @@
 import { auth } from "@/auth";
-import Link from "next/link";
+import { NavbarActions } from "@/components/global/navbar/navbarActions";
+import { NavbarItemProps } from "@/components/global/navbar/navbarItem";
+import { NavbarList } from "@/components/global/navbar/navbarList";
+import { NavbarRoot } from "./navbarRoot";
 
 export async function Navbar() {
   const session = await auth();
 
-  console.log(session);
+  const navItemsLeft: NavbarItemProps[] = [
+    { href: "/categories", label: "Categorias" },
+    { href: "/best-sellers", label: "Mais Vendidos" },
+    { href: "/contact", label: "Contato" },
+  ];
+
+  const navItemsRight: NavbarItemProps[] = [
+    { href: "/history", label: "Histórico" },
+    { href: "/cart", label: "Carrinho" },
+    { href: "/purchases", label: "Compras" },
+  ];
 
   return (
-    <div className="flex items-center justify-between w-full max-w-4xl mx-auto text-xl">
+    <NavbarRoot>
+      <NavbarList items={navItemsLeft} />
       <ul className="flex items-center gap-8">
-        <li>
-          <a href="">Categorias</a>
-        </li>
-        <li>
-          <a href="">Mais Vendidos</a>
-        </li>
-        <li>
-          <a href="">Contato</a>
-        </li>
+        <NavbarList items={navItemsRight} />
+        <NavbarActions session={session} />
       </ul>
-      <ul className="flex items-center gap-8">
-        <li>
-          <a href="">Histórico</a>
-        </li>
-        <li>
-          <a href="">Carrinho</a>
-        </li>
-        <li>
-          <a href="">Compras</a>
-        </li>
-        {session ? (
-          <li>
-            <a href="">Perfil</a>
-          </li>
-        ) : (
-          <li>
-            <Link
-              href="/auth/login"
-              className="bg-gray-900 rounded-md py-2 px-3 text-white hover:bg-gray-700"
-            >
-              Entrar
-            </Link>
-          </li>
-        )}
-      </ul>
-    </div>
+    </NavbarRoot>
   );
 }
