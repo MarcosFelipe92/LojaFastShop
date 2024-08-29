@@ -6,8 +6,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useState, useTransition } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { Input } from "../input";
-import { Button } from "../ui/button";
 import {
   Form,
   FormControl,
@@ -15,10 +13,12 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "../ui/form";
-import { CardWrapper } from "./card-wrapper";
-import FormError from "./form-error";
-import FormSuccess from "./form-sucess";
+} from "@/components/ui/form";
+import { CardWrapper } from "@/components/auth/card-wrapper";
+import FormError from "@/components/auth/form-error";
+import FormSuccess from "@/components/auth/form-success";
+import { Input } from "@/components/global/input";
+import { Button } from "@/components/ui/button";
 
 export default function FormLogin() {
   const [isPending, startTransition] = useTransition();

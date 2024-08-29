@@ -1,7 +1,7 @@
 import { getProduct } from "@/actions/product/productService";
-import { Container } from "@/components/container";
-import { Header } from "@/components/header";
-import Rating from "@/components/rating";
+import { Container } from "@/components/global/container";
+import { Header } from "@/components/global/header";
+import Rating from "@/components/products/rating";
 import Image from "next/image";
 
 export default async function ProductDetails({

@@ -1,4 +1,11 @@
-export function Navbar() {
+import { auth } from "@/auth";
+import Link from "next/link";
+
+export async function Navbar() {
+  const session = await auth();
+
+  console.log(session);
+
   return (
     <div className="flex items-center justify-between w-full max-w-4xl mx-auto text-xl">
       <ul className="flex items-center gap-8">
@@ -22,9 +29,20 @@ export function Navbar() {
         <li>
           <a href="">Compras</a>
         </li>
-        <li>
-          <a href="">Perfil</a>
-        </li>
+        {session ? (
+          <li>
+            <a href="">Perfil</a>
+          </li>
+        ) : (
+          <li>
+            <Link
+              href="/auth/login"
+              className="bg-gray-900 rounded-md py-2 px-3 text-white hover:bg-gray-700"
+            >
+              Entrar
+            </Link>
+          </li>
+        )}
       </ul>
     </div>
   );

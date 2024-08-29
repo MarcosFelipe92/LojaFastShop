@@ -12,8 +12,8 @@ import { IoIosPhonePortrait } from "react-icons/io";
 import { MdAlternateEmail } from "react-icons/md";
 import { PiPassword } from "react-icons/pi";
 import { z } from "zod";
-import { Input } from "../input";
-import { Button } from "../ui/button";
+import { Input } from "@/components/global/input";
+import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
@@ -21,10 +21,10 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "../ui/form";
-import { CardWrapper } from "./card-wrapper";
-import FormError from "./form-error";
-import FormSuccess from "./form-sucess";
+} from "@/components/ui/form";
+import { CardWrapper } from "@/components/auth/card-wrapper";
+import FormError from "@/components/auth/form-error";
+import FormSuccess from "@/components/auth/form-success";
 
 export default function FormRegister() {
   const [isPending, startTransition] = useTransition();

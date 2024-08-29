@@ -1,6 +1,6 @@
 import Image from "next/image";
-import { Navbar } from "./navbar";
-import { Input } from "./input";
+import { Navbar } from "@/components/global/navbar";
+import { Input } from "@/components/global/input";
 import { FaUser } from "react-icons/fa";
 import Link from "next/link";
 
