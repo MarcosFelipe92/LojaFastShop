@@ -3,7 +3,9 @@ import { Input } from "@/components/global/input";
 
 export function HeaderSearchBar() {
   return (
-    <form>
+    <form className="w-full md:w-auto">
+      {" "}
+      {/* Largura 100% em telas pequenas */}
       <Input
         startAdornment={<IoIosSearch />}
         placeholder="Pesquisar"

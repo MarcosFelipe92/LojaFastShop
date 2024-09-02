@@ -21,7 +21,7 @@ export default function Rating({
       }
     >
       <div className="flex gap-2 items-center">
-        {averageRating}
+        <span className="text-sm">{averageRating}</span>
         {totalStars.map((index) => (
           <Star key={index} isActive />
         ))}

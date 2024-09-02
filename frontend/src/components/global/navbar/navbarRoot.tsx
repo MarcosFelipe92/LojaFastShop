@@ -5,7 +5,7 @@ interface NavbarRootProps {
 }
 export function NavbarRoot({ children }: NavbarRootProps) {
   return (
-    <div className="flex items-center justify-between w-full max-w-4xl mx-auto text-xl">
+    <div className="relative flex items-center justify-between w-full max-w-4xl mx-auto text-xl">
       {children}
     </div>
   );

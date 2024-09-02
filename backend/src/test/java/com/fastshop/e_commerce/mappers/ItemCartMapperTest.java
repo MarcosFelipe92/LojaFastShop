@@ -10,7 +10,9 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.fastshop.e_commerce.dtos.itemCart.ItemCartDTO;
+import com.fastshop.e_commerce.dtos.product.ProductDTO;
 import com.fastshop.e_commerce.models.ItemCartBO;
+import com.fastshop.e_commerce.models.ProductBO;
 import com.fastshop.e_commerce.models.ShoppingCartBO;
 
 @ExtendWith(MockitoExtension.class)
@@ -20,6 +22,7 @@ public class ItemCartMapperTest {
     private static final String NAME = "Produto A";
     private static final String DESCRIPTION = "Descrição A";
     private static final Double PRICE = 20.0;
+    private static final String IMAGE = "imagem";
 
     @Mock
     private ShoppingCartBO mockShoppingCartBO;
@@ -31,17 +34,18 @@ public class ItemCartMapperTest {
         void shouldCreateItemCartBOWhenItemCartDTOIsPassed() {
             // Arrange
             when(mockShoppingCartBO.getId()).thenReturn(ID);
+            ProductDTO productDTO = new ProductDTO(ID, NAME, DESCRIPTION, PRICE, IMAGE);
 
-            ItemCartDTO input = new ItemCartDTO(ID, NAME, DESCRIPTION, PRICE, ID);
+            ItemCartDTO input = new ItemCartDTO(ID, productDTO, ID);
 
             // Act
             ItemCartBO output = ItemCartMapper.dtoToEntity(input, mockShoppingCartBO);
 
             // Assert
             assertEquals(ID, output.getId());
-            assertEquals(NAME, output.getName());
-            assertEquals(DESCRIPTION, output.getDescription());
-            assertEquals(PRICE, output.getPrice());
+            assertEquals(NAME, output.getProduct().getName());
+            assertEquals(DESCRIPTION, output.getProduct().getDescription());
+            assertEquals(PRICE, output.getProduct().getPrice());
 
             assertEquals(input.getShoppingCartId(), output.getShoppingCart().getId());
 
@@ -55,16 +59,19 @@ public class ItemCartMapperTest {
         @Test
         void shouldCreateItemCartDTOWhenItemCartBOIsPassed() {
             // Arrange
-            ItemCartBO input = new ItemCartBO(ID, NAME, DESCRIPTION, PRICE, mockShoppingCartBO);
+
+            ProductBO productBO = new ProductBO(ID, NAME, DESCRIPTION, PRICE, IMAGE);
+
+            ItemCartBO input = new ItemCartBO(ID, productBO, mockShoppingCartBO);
 
             // Act
             ItemCartDTO output = ItemCartMapper.entityToDto(input);
 
             // Assert
             assertEquals(ID, output.getId());
-            assertEquals(NAME, output.getName());
-            assertEquals(DESCRIPTION, output.getDescription());
-            assertEquals(PRICE, output.getPrice());
+            assertEquals(NAME, output.getProduct().getName());
+            assertEquals(DESCRIPTION, output.getProduct().getDescription());
+            assertEquals(PRICE, output.getProduct().getPrice());
 
             assertEquals(input.getShoppingCart().getId(), output.getShoppingCartId());
 

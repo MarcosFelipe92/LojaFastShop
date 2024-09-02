@@ -29,6 +29,7 @@ export default async function Home() {
                 width={150}
                 height={150}
                 alt="Produto 1"
+                className="object-cover w-full h-[120px] md:h-[150px]"
               />
             </Link>
           </SimpleCardProduct>

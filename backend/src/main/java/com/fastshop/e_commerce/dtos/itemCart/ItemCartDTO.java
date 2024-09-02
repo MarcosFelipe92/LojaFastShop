@@ -1,5 +1,7 @@
 package com.fastshop.e_commerce.dtos.itemCart;
 
+import com.fastshop.e_commerce.dtos.product.ProductDTO;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -9,8 +11,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class ItemCartDTO {
     private Long id;
-    private String name;
-    private String description;
-    private Double price;
+    private ProductDTO product;
     private Long shoppingCartId;
 }

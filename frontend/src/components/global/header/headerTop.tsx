@@ -1,12 +1,12 @@
 import { ReactNode } from "react";
 
-interface HeaderRootProps {
+interface HeaderTopProps {
   children: ReactNode;
 }
 
-export function HeaderTop({ children }: HeaderRootProps) {
+export function HeaderTop({ children }: HeaderTopProps) {
   return (
-    <div className="flex items-center gap-5 w-full max-w-6xl justify-between mx-auto">
+    <div className="flex flex-col md:flex-row items-center gap-5 w-full max-w-6xl justify-between mx-auto">
       {children}
     </div>
   );

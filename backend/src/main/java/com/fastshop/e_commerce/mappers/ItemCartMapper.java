@@ -1,6 +1,7 @@
 package com.fastshop.e_commerce.mappers;
 
 import com.fastshop.e_commerce.dtos.itemCart.ItemCartDTO;
+import com.fastshop.e_commerce.dtos.product.ProductDTO;
 import com.fastshop.e_commerce.models.ItemCartBO;
 import com.fastshop.e_commerce.models.ShoppingCartBO;
 
@@ -12,21 +13,17 @@ public class ItemCartMapper {
         ItemCartBO entity = new ItemCartBO();
 
         entity.setId(dto.getId());
-        entity.setName(dto.getName());
-        entity.setDescription(dto.getDescription());
-        entity.setPrice(dto.getPrice());
+        entity.setProduct(ProductMapper.dtoToEntity(dto.getProduct()));
         entity.setShoppingCart(shoppingCartBO);
         return entity;
     }
 
     public static ItemCartDTO entityToDto(ItemCartBO entity) {
         Long id = entity.getId();
-        String name = entity.getName();
-        String description = entity.getDescription();
-        Double price = entity.getPrice();
+        ProductDTO product = ProductMapper.entityToDto(entity.getProduct());
         Long shoppingCartId = entity.getShoppingCart().getId();
 
-        return new ItemCartDTO(id, name, description, price, shoppingCartId);
+        return new ItemCartDTO(id, product, shoppingCartId);
     }
 
 }
