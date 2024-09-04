@@ -25,6 +25,7 @@ public class ShoppingCartService {
     private final ShoppingCartRepository repository;
     private final AccountService accountService;
     private final AuthService authService;
+    private final ItemCartService itemCartService;
 
     public ShoppingCartDTO findById(Long accountId, JwtAuthenticationToken token) {
         AccountDTO account = accountService.findById(accountId, token);
@@ -44,6 +45,35 @@ public class ShoppingCartService {
             ItemCartBO itemCart = ItemCartMapper.dtoToEntity(dto, shoppingCart);
             shoppingCart.getItems().add(itemCart);
             repository.save(shoppingCart);
+        } else {
+            throw new AccessDeniedException(
+                    "You are not allowed to remove an address to an account that does not belong to you.");
+        }
+    }
+
+    @Transactional
+    public void removeItemToCart(Long accountId, Long itemId,
+            JwtAuthenticationToken token) {
+        AccountDTO account = accountService.findById(accountId, token);
+        if (authService.validateUserPermission(token, account.getUserId())) {
+            ShoppingCartBO shoppingCart = repository.findById(account.getShoppingCart().getId())
+                    .orElseThrow(() -> new NotFoundException("ShoppingCart not found"));
+            ItemCartBO itemCartToRemove = null;
+
+            for (ItemCartBO item : shoppingCart.getItems()) {
+                if (item.getId().equals(itemId)) {
+                    itemCartToRemove = item;
+                    break;
+                }
+            }
+
+            if (itemCartToRemove != null) {
+                shoppingCart.getItems().remove(itemCartToRemove);
+                itemCartService.delete(itemCartToRemove.getId());
+                repository.save(shoppingCart);
+            } else {
+                throw new NotFoundException("Item not found");
+            }
         } else {
             throw new AccessDeniedException(
                     "You are not allowed to remove an address to an account that does not belong to you.");
