@@ -1,5 +1,6 @@
 package com.fastshop.e_commerce.controllers;
 
+import java.io.IOException;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,9 +11,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.fastshop.e_commerce.dtos.product.ProductDTO;
 import com.fastshop.e_commerce.services.ProductService;
@@ -37,15 +39,17 @@ public class ProductController {
     }
 
     @PostMapping
-    public ResponseEntity<ProductDTO> create(@RequestBody ProductDTO dto, JwtAuthenticationToken token) {
-        ProductDTO obj = service.create(dto, token);
+    public ResponseEntity<ProductDTO> create(@RequestPart("dto") ProductDTO dto, JwtAuthenticationToken token,
+            @RequestPart(value = "file", required = false) MultipartFile image) throws IOException {
+        ProductDTO obj = service.create(dto, token, image);
         return ResponseEntity.ok().body(obj);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ProductDTO> update(@RequestBody ProductDTO dto, @PathVariable Long id,
-            JwtAuthenticationToken token) {
-        ProductDTO obj = service.update(id, dto, token);
+    public ResponseEntity<ProductDTO> update(@PathVariable Long id, @RequestPart("dto") ProductDTO dto,
+            JwtAuthenticationToken token,
+            @RequestPart(value = "file", required = false) MultipartFile image) throws IOException {
+        ProductDTO obj = service.update(id, dto, image, token);
         return ResponseEntity.ok().body(obj);
     }
 

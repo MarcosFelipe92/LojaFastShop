@@ -1,9 +1,7 @@
 import { getAllProducts } from "@/actions/product/productService";
 import { Container } from "@/components/global/container";
 import { Header } from "@/components/global/header";
-import { SimpleCardProduct } from "@/components/products/simple-card-product";
-import Image from "next/image";
-import Link from "next/link";
+import { CardProduct } from "@/components/products/card-product";
 
 async function getData() {
   const products = await getAllProducts();
@@ -18,21 +16,19 @@ export default async function Home() {
       <Header />
       <div className="flex flex-wrap justify-center gap-8 mt-5">
         {products.map((product) => (
-          <SimpleCardProduct
-            key={product.id}
-            name={product.name}
-            price={product.price.toString()}
-          >
-            <Link href={`products/${product.id}`}>
-              <Image
-                src="/images/produto1.jpg"
-                width={150}
-                height={150}
-                alt="Produto 1"
-                className="object-cover w-full h-[120px] md:h-[150px]"
-              />
-            </Link>
-          </SimpleCardProduct>
+          <CardProduct.Root key={product.id}>
+            <CardProduct.Image
+              src="/images/produto1.jpg"
+              alt="Produto"
+              productId={product.id}
+            />
+            <CardProduct.Info
+              name={product.name}
+              price={product.price}
+              averageRating={5.0}
+              totalReviews={100}
+            />
+          </CardProduct.Root>
         ))}
       </div>
     </Container>

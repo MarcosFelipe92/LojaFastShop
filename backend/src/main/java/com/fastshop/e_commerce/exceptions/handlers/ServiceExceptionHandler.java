@@ -1,5 +1,6 @@
 package com.fastshop.e_commerce.exceptions.handlers;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
 
 import org.springframework.dao.DataIntegrityViolationException;
@@ -34,6 +35,14 @@ public class ServiceExceptionHandler {
     @ExceptionHandler(DataIntegrityViolationException.class)
     private ResponseEntity<StandardError> dataIntegrityViolation(DataIntegrityViolationException ex,
             HttpServletRequest request) {
+        StandardError error = new StandardError(LocalDateTime.now(), HttpStatus.INTERNAL_SERVER_ERROR.value(),
+                ex.getMessage(),
+                request.getRequestURI());
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(error);
+    }
+
+    @ExceptionHandler(IOException.class)
+    private ResponseEntity<StandardError> io(IOException ex, HttpServletRequest request) {
         StandardError error = new StandardError(LocalDateTime.now(), HttpStatus.INTERNAL_SERVER_ERROR.value(),
                 ex.getMessage(),
                 request.getRequestURI());

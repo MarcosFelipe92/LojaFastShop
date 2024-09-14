@@ -1,7 +1,9 @@
 import { getProduct } from "@/actions/product/productService";
 import { Container } from "@/components/global/container";
 import { Header } from "@/components/global/header";
-import Rating from "@/components/products/rating";
+import Rating from "@/components/global/rate";
+import ContentInfo from "@/components/products/product-details/ContentInfo";
+import HeaderInfo from "@/components/products/product-details/headerInfo";
 import Image from "next/image";
 
 export default async function ProductDetails({
@@ -14,25 +16,25 @@ export default async function ProductDetails({
   return (
     <Container>
       <Header />
-      <div className="flex justify-between mt-5 w-full">
+      <div className="flex justify-center mt-5 space-x-52 w-full">
         <div>
           <Image
-            src={"/images/produto1.jpg"}
+            src={`data:image/jpeg;base64,${product.image}`}
             width={400}
             height={400}
             alt="Produto"
           />
         </div>
-        <div className="flex flex-col max-w-screen-sm">
-          <div className="flex flex-col gap-4 mb-3">
-            <h1 className="text-3xl">{product.name}</h1>
-            <Rating averageRating={5.0} totalReviews={100} variant="row" />
-          </div>
-
-          <p>{`Lorem ipsum dolor, sit amet consectetur adipisicing elit. Minus, nam amet minima laborum suscipit facere. 
-          Tempora quia rem nobis, quas dolorum voluptatum ducimus! Quis deleniti dolore nulla, distinctio quod libero.`}</p>
-          <p className="text-3xl text-lime-500 mt-4">R$ {product.price}</p>
-          <p>{product?.image}</p>
+        <div className="flex flex-col max-w-screen-sm w-full">
+          <HeaderInfo
+            name={product.name}
+            averageRating={5.0}
+            totalReviews={100}
+          />
+          <ContentInfo
+            description={product.description}
+            price={product.price}
+          />
         </div>
       </div>
     </Container>
