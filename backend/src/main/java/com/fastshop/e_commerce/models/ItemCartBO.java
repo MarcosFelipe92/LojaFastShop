@@ -1,5 +1,7 @@
 package com.fastshop.e_commerce.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -29,6 +31,7 @@ public class ItemCartBO {
     @JoinColumn(name = "product_id")
     private ProductBO product;
 
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "shopping_cart_id")
     private ShoppingCartBO shoppingCart;

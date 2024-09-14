@@ -27,12 +27,12 @@ public class ShoppingCartService {
     private final AuthService authService;
     private final ItemCartService itemCartService;
 
+    @Transactional
     public ShoppingCartDTO findById(Long accountId, JwtAuthenticationToken token) {
         AccountDTO account = accountService.findById(accountId, token);
-        ShoppingCartBO shoppingCart = repository.findById(account.getShoppingCart().getId())
-                .orElseThrow(() -> new NotFoundException("ShoppingCart not found"));
-        return ShoppingCartMapper.entityToDto(shoppingCart, shoppingCart.getItems());
-
+        ShoppingCartDTO shoppingCart = account.getShoppingCart();
+        System.out.println("Items size: " + shoppingCart.getItems().size());
+        return shoppingCart;
     }
 
     @Transactional

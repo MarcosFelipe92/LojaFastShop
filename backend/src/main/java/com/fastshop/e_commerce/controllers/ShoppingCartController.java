@@ -25,7 +25,8 @@ public class ShoppingCartController {
     @GetMapping
     public ResponseEntity<ShoppingCartDTO> findById(
             @PathVariable Long accountId, JwtAuthenticationToken token) {
-        return ResponseEntity.ok().body(service.findById(accountId, token));
+        ShoppingCartDTO shoppingCart = service.findById(accountId, token);
+        return ResponseEntity.ok().body(shoppingCart);
     }
 
     @PostMapping
@@ -33,6 +34,7 @@ public class ShoppingCartController {
             @PathVariable Long accountId,
             @RequestBody ItemCartDTO itemCartDTO, JwtAuthenticationToken token) {
         service.addItemToCart(accountId, itemCartDTO, token);
+
         return ResponseEntity.status(201).body("Item added successfully");
     }
 
