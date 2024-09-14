@@ -7,8 +7,10 @@ import org.springframework.stereotype.Service;
 import com.fastshop.e_commerce.auth.AuthService;
 import com.fastshop.e_commerce.dtos.account.AccountDTO;
 import com.fastshop.e_commerce.dtos.itemCart.ItemCartDTO;
+import com.fastshop.e_commerce.dtos.shoppingCart.ShoppingCartDTO;
 import com.fastshop.e_commerce.exceptions.common.NotFoundException;
 import com.fastshop.e_commerce.mappers.ItemCartMapper;
+import com.fastshop.e_commerce.mappers.ShoppingCartMapper;
 import com.fastshop.e_commerce.models.ItemCartBO;
 import com.fastshop.e_commerce.models.ShoppingCartBO;
 import com.fastshop.e_commerce.repositories.ShoppingCartRepository;
@@ -24,6 +26,13 @@ public class ShoppingCartService {
     private final AccountService accountService;
     private final AuthService authService;
     private final ItemCartService itemCartService;
+
+    @Transactional
+    public ShoppingCartDTO findById(Long id, JwtAuthenticationToken token) {
+        ShoppingCartBO shoppingCart = repository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Shopping Cart not found"));
+        return ShoppingCartMapper.entityToDto(shoppingCart, shoppingCart.getItems());
+    }
 
     @Transactional
     public void addItemToCart(Long accountId, ItemCartDTO dto,

@@ -49,8 +49,7 @@ public class AccountMapper {
     public static AccountDTO entityToDto(AccountBO entity, List<AddressBO> addresses) {
         Long id = entity.getId();
         Long userId = entity.getUser().getId();
-        ShoppingCartDTO shoppingCart = ShoppingCartMapper.entityToDto(entity.getShoppingCart(),
-                entity.getShoppingCart().getItems());
+        ShoppingCartDTO shoppingCart = ShoppingCartMapper.entityToDto(entity.getShoppingCart());
         List<AddressDTO> addressesToAdd = addresses.stream().map(AddressMapper::entityToDto)
                 .collect(Collectors.toList());
 
