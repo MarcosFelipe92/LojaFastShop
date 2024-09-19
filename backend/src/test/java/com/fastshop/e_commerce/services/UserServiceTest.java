@@ -53,7 +53,7 @@ public class UserServiceTest {
 
     private static final String EXCEPTION_MESSAGE_USER_NOT_FOUND = "User not found.";
     private static final String EXCEPTION_MESSAGE_FIND_BY_ID = "You are not allowed to access to an user that does not you.";
-    private static final String EXCEPTION_MESSAGE_CREATE = "Email already registered.";
+    private static final String EXCEPTION_MESSAGE_CREATE = "Email Já existe.";
     private static final String EXCEPTION_MESSAGE_UPDATE = "You are not allowed to modify to an user that does not you.";
     private static final String EXCEPTION_MESSAGE_DELETE = "You are not allowed to delete to an user that does not you.";
 

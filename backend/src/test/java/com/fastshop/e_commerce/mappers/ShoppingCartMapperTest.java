@@ -12,9 +12,11 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.fastshop.e_commerce.dtos.itemCart.ItemCartDTO;
+import com.fastshop.e_commerce.dtos.product.ProductDTO;
 import com.fastshop.e_commerce.dtos.shoppingCart.ShoppingCartDTO;
 import com.fastshop.e_commerce.models.AccountBO;
 import com.fastshop.e_commerce.models.ItemCartBO;
+import com.fastshop.e_commerce.models.ProductBO;
 import com.fastshop.e_commerce.models.ShoppingCartBO;
 
 @ExtendWith(MockitoExtension.class)
@@ -31,6 +33,12 @@ public class ShoppingCartMapperTest {
     @Mock
     private ItemCartDTO mockItemCartDTO;
 
+    @Mock
+    private ProductDTO mockProductDTO;
+
+    @Mock
+    private ProductBO mockProductBO;
+
     @Nested
     class DtoToEntity {
 
@@ -39,6 +47,8 @@ public class ShoppingCartMapperTest {
             // Arrange
             when(mockAccountBO.getId()).thenReturn(ID);
             when(mockItemCartDTO.getId()).thenReturn(ID);
+            when(mockItemCartDTO.getProduct()).thenReturn(mockProductDTO);
+            when(mockProductDTO.getId()).thenReturn(ID);
 
             ShoppingCartDTO input = new ShoppingCartDTO(ID, ID, List.of(mockItemCartDTO));
 
@@ -80,6 +90,8 @@ public class ShoppingCartMapperTest {
             // Arrange
             when(mockAccountBO.getId()).thenReturn(ID);
             when(mockItemCartBO.getId()).thenReturn(ID);
+            when(mockItemCartBO.getProduct()).thenReturn(mockProductBO);
+            when(mockProductBO.getId()).thenReturn(ID);
 
             ShoppingCartBO input = new ShoppingCartBO(ID, mockAccountBO, List.of(mockItemCartBO));
 
