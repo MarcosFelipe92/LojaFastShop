@@ -1,0 +1,28 @@
+### Criação de um novo usuário
+POST http://localhost:8080/users/register
+Content-Type: application/json
+
+{
+  "name": "Admin",
+  "email": "admin@example.com",
+  "password": "123456",
+  "phones": [
+    {
+      "number": "988776655",
+      "type": "Celular"
+    }
+  ]
+}
+
+###Login
+
+POST http://localhost:8080/token/login
+Content-Type: application/json
+
+{
+  "email": "admin@example.com",
+  "password": "123456"
+}
+
+### Teste
+
