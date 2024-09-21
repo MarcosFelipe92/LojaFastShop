@@ -1,0 +1,70 @@
+@baseUrl = http://localhost:8080
+
+# @name login
+POST {{baseUrl}}/token/login
+Content-Type: application/json
+
+{
+  "email": "admin@example.com",
+  "password": "123456"
+}
+
+@authToken = {{login.response.body.token}}
+
+###
+
+# @name create
+POST {{baseUrl}}/users/register
+Content-Type: application/json
+
+{
+  "name": "marcos",
+  "email": "marcos@example.com",
+  "password": "123456",
+  "phones": [
+    {
+      "number": "988776655",
+      "type": "Celular"
+    }
+  ]
+}
+
+###
+
+# @name findAll
+GET {{baseUrl}}/users
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+
+###
+
+# @name findById
+GET {{baseUrl}}/users/2
+Authorization: Bearer {{authToken}}
+Content-Type: application/json
+
+###
+
+# @name update
+PUT {{baseUrl}}/users/1
+Authorization: Bearer {{authToken}}
+Content-Type: application/json
+
+{
+  "name": "marcos",
+  "email": "marcos@example.com",
+  "password": "123456",
+  "phones": [
+    {
+      "number": "988776655",
+      "type": "Celular"
+    }
+  ]
+}
+
+###
+
+# @name delete
+DELETE {{baseUrl}}users/1
+Headers: Authorization: Bearer {token}
+Content-Type: application/json

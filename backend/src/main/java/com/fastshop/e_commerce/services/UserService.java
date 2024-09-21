@@ -80,6 +80,13 @@ public class UserService {
     public UserDTO update(UserDTO dto, Long id, JwtAuthenticationToken token) {
         UserBO userUpdated = repository.findById(id).orElseThrow(() -> new NotFoundException("User not found."));
         if (authService.validateUserPermission(token, id)) {
+            String email = userUpdated.getEmail();
+            repository.findByEmail(dto.getEmail()).ifPresent(user -> {
+                if (!dto.getEmail().equals(email)) {
+                    throw new InvalidEmailException("Email Já existe.");
+                }
+            });
+
             AccountBO account = userUpdated.getAccount();
             UserMapper.copyAttributes(dto, userUpdated, account);
             userUpdated.setPassword(passwordEncoder.encode(dto.getPassword()));
