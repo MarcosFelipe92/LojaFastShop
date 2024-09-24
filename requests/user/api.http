@@ -5,29 +5,11 @@ POST {{baseUrl}}/token/login
 Content-Type: application/json
 
 {
-  "email": "admin@example.com",
+  "email": "marcos@example.com",
   "password": "123456"
 }
 
 @authToken = {{login.response.body.token}}
-
-###
-
-# @name create
-POST {{baseUrl}}/users/register
-Content-Type: application/json
-
-{
-  "name": "marcos",
-  "email": "marcos@example.com",
-  "password": "123456",
-  "phones": [
-    {
-      "number": "988776655",
-      "type": "Celular"
-    }
-  ]
-}
 
 ###
 
@@ -39,9 +21,27 @@ Authorization: Bearer {{authToken}}
 ###
 
 # @name findById
-GET {{baseUrl}}/users/2
+GET {{baseUrl}}/users/1
 Authorization: Bearer {{authToken}}
 Content-Type: application/json
+
+###
+
+# @name create
+POST {{baseUrl}}/users/register
+Content-Type: application/json
+
+{
+  "name": "admin",
+  "email": "admin@example.com",
+  "password": "123456",
+  "phones": [
+    {
+      "number": "988776655",
+      "type": "Celular"
+    }
+  ]
+}
 
 ###
 
@@ -66,5 +66,5 @@ Content-Type: application/json
 
 # @name delete
 DELETE {{baseUrl}}users/1
-Headers: Authorization: Bearer {token}
+Authorization: Bearer {{authToken}}
 Content-Type: application/json

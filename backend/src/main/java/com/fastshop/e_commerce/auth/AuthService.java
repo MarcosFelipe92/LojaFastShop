@@ -37,6 +37,8 @@ public class AuthService {
         Instant now = Instant.now();
         Long expiresIn = 10800L;
 
+        Long accountId = user.getAccount().getId();
+
         String scopes = user.getRoles()
                 .stream()
                 .map(RoleBO::getName)
@@ -47,6 +49,7 @@ public class AuthService {
                 .subject(user.getId().toString())
                 .issuedAt(now)
                 .expiresAt(now.plusSeconds(expiresIn))
+                .claim("accountId", accountId)
                 .claim("scope", scopes)
                 .build();
 

@@ -1,7 +1,9 @@
 import { getProduct } from "@/actions/product/productService";
+import { auth } from "@/auth";
 import { Container } from "@/components/global/container";
 import { Header } from "@/components/global/header";
-import Rating from "@/components/global/rate";
+import { AddCartItemButton } from "@/components/products/product-details/AddCartItemButton";
+import { BuyButton } from "@/components/products/product-details/BuyButton";
 import ContentInfo from "@/components/products/product-details/ContentInfo";
 import HeaderInfo from "@/components/products/product-details/headerInfo";
 import Image from "next/image";
@@ -25,7 +27,7 @@ export default async function ProductDetails({
             alt="Produto"
           />
         </div>
-        <div className="flex flex-col max-w-screen-sm w-full">
+        <div className="flex flex-col gap-2 max-w-screen-sm w-full">
           <HeaderInfo
             name={product.name}
             averageRating={5.0}
@@ -35,6 +37,8 @@ export default async function ProductDetails({
             description={product.description}
             price={product.price}
           />
+          <AddCartItemButton productId={product.id} />
+          <BuyButton />
         </div>
       </div>
     </Container>

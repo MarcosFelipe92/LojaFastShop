@@ -1,9 +1,0 @@
-###Login
-
-POST http://localhost:8080/token/login
-Content-Type: application/json
-
-{
-  "email": "admin@example.com",
-  "password": "123456"
-}

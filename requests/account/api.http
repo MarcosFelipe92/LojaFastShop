@@ -1,0 +1,53 @@
+@baseUrl = http://localhost:8080
+
+# @name login
+POST {{baseUrl}}/token/login
+Content-Type: application/json
+
+{
+  "email": "admin@example.com",
+  "password": "123456"
+}
+
+@authToken = {{login.response.body.token}}
+
+###
+
+# @name findAll
+GET {{baseUrl}}/accounts
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+
+###
+
+# @name findById
+GET {{baseUrl}}/accounts/1
+Authorization: Bearer {{authToken}}
+Content-Type: application/json
+
+###
+
+# @name addAddress
+POST {{baseUrl}}/accounts/1/address
+Authorization: Bearer {{authToken}}
+Content-Type: application/json
+
+{
+  "id": 1,
+  "zipCode": "12345-678",
+  "street": "Rua Exemplo",
+  "number": "100",
+  "complement": "Apto 202",
+  "neighborhood": "Bairro Exemplo",
+  "city": "Cidade Exemplo",
+  "state": "Estado Exemplo",
+  "country": "País Exemplo",
+  "accountId": 123
+}
+
+###
+
+# @name removeAddress
+DELETE  {{baseUrl}}/accounts/1/address/2
+Authorization: Bearer {{authToken}}
+Content-Type: application/json

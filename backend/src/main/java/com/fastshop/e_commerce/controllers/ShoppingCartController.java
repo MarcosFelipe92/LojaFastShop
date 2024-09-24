@@ -35,7 +35,7 @@ public class ShoppingCartController {
             @RequestBody ItemCartDTO itemCartDTO, JwtAuthenticationToken token) {
         service.addItemToCart(accountId, itemCartDTO, token);
 
-        return ResponseEntity.status(201).body("Item added successfully");
+        return ResponseEntity.status(200).body("Item added successfully");
     }
 
     @DeleteMapping("/{itemId}")

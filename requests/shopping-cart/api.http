@@ -1,0 +1,41 @@
+@baseUrl = http://localhost:8080
+
+# @name login
+POST {{baseUrl}}/token/login
+Content-Type: application/json
+
+{
+  "email": "marcos@example.com",
+  "password": "123456"
+}
+
+@authToken = {{login.response.body.token}}
+
+###
+
+# @name findById
+GET {{baseUrl}}/accounts/1/shopping-cart/1
+Authorization: Bearer {{authToken}}
+Content-Type: application/json
+
+###
+
+# @name addItemcart
+POST {{baseUrl}}/accounts/1/shopping-cart
+Authorization: Bearer {{authToken}}
+Content-Type: application/json
+
+{
+  "product": {
+    "id": 1
+  }
+}
+
+###
+
+# @name removeItemcart
+DELETE {{baseUrl}}/accounts/1/shopping-cart/2
+Authorization: Bearer {{authToken}}
+Content-Type: application/json
+
+

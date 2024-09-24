@@ -10,6 +10,7 @@ declare module "next-auth" {
 
 declare module "next-auth" {
   interface User {
+    accountId: number;
     role: string;
     token: string;
   }

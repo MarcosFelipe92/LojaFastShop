@@ -35,6 +35,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           return {
             id: decodedToken.sub,
             token: data.token,
+            accountId: decodedToken.accountId,
             role: decodedToken.scope || "BASIC",
           };
         } catch (error) {
@@ -49,6 +50,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       if (user) {
         token.sub = user.id;
         token.accessToken = user.token;
+        token.accountId = user.accountId;
         token.role = user.role;
       }
 
@@ -57,6 +59,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     async session({ token, session }) {
       if (session.user && token.sub) {
         session.user.id = token.sub;
+        session.user.accountId = token.accountId;
         session.user.role = token.role;
         session.user.token = token.accessToken;
       }

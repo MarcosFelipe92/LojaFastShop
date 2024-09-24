@@ -1,0 +1,81 @@
+@baseUrl = http://localhost:8080
+
+# @name login
+POST {{baseUrl}}/token/login
+Content-Type: application/json
+
+{
+  "email": "admin@example.com",
+  "password": "123456"
+}
+
+@authToken = {{login.response.body.token}}
+
+###
+
+# @name findAll
+GET {{baseUrl}}/products
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+
+###
+
+# @name findById
+GET {{baseUrl}}/products/1
+Authorization: Bearer {{authToken}}
+Content-Type: application/json
+
+###
+
+# @name create
+POST {{baseUrl}}/products
+Authorization: Bearer {{authToken}}
+Content-Type: multipart/form-data; boundary=boundary
+
+--boundary
+Content-Disposition: form-data; name="dto"
+Content-Type: application/json
+
+{
+  "name": "Pc Gamer",
+  "description": "Descrição do notebook",
+  "price": "2000"
+}
+
+--boundary
+Content-Disposition: form-data; name="file"; filename="imagem.jpg"
+Content-Type: image/jpeg
+
+< ../images/notebook.jpeg
+--boundary--
+
+###
+
+# @name update
+PUT {{baseUrl}}/products/3
+Authorization: Bearer {{authToken}}
+Content-Type: multipart/form-data; boundary=boundary
+
+--boundary
+Content-Disposition: form-data; name="dto"
+Content-Type: application/json
+
+{
+  "name": "Celular",
+  "description": "Descrição do celular",
+  "price": "2000"
+}
+
+--boundary
+Content-Disposition: form-data; name="file"; filename="imagem.jpg"
+Content-Type: image/jpeg
+
+< ../images/pc.jpeg
+--boundary--
+
+###
+
+# @name delete
+DELETE {{baseUrl}}/products/2
+Authorization: Bearer {{authToken}}
+Content-Type: application/json

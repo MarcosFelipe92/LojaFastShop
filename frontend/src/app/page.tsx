@@ -18,7 +18,7 @@ export default async function Home() {
         {products.map((product) => (
           <CardProduct.Root key={product.id}>
             <CardProduct.Image
-              src="/images/produto1.jpg"
+              src={`data:image/jpeg;base64,${product.image}`}
               alt="Produto"
               productId={product.id}
             />
