@@ -2,25 +2,20 @@
 
 import { auth } from "@/auth";
 
-type Product = {
-  id: number;
-  name: string;
-  description: string;
-  price: number;
-  image?: string;
+type Response = {
+  message?: string;
+  error?: string;
 };
 
-type ItemCart = {
-  id: number;
-  product: Product;
-  shoppingCartId: number;
-};
-
-export const addItemCart = async (productId: number): Promise<boolean> => {
+export const addItemCart = async (
+  productId: number,
+  quantity: number
+): Promise<Response> => {
   try {
     const session = await auth();
+
     if (!session?.user) {
-      throw new Error("Usuário não autenticado");
+      return { error: "Usuário não autenticado!" };
     }
 
     const { accountId, token } = session.user;
@@ -34,7 +29,10 @@ export const addItemCart = async (productId: number): Promise<boolean> => {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify({ product: { id: productId } }),
+        body: JSON.stringify({
+          product: { id: productId },
+          quantity,
+        }),
       }
     );
 
@@ -46,9 +44,15 @@ export const addItemCart = async (productId: number): Promise<boolean> => {
       throw new Error(`Erro ${response.status}: ${errorMessage}`);
     }
 
-    return true;
-  } catch (error) {
-    console.error("Erro na função addItemCart:", error);
-    return false;
+    const responseData = await response.json();
+    return responseData;
+  } catch (error: any) {
+    console.error(
+      "Erro ao adicionar item ao carrinho:",
+      error.message || error
+    );
+    return {
+      error: "Falha ao adicionar item. Por favor, tente novamente mais tarde.",
+    };
   }
 };

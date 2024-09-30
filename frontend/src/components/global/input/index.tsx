@@ -23,7 +23,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
   ) => {
     const labelId = useId();
     return (
-      <div className={className}>
+      <div>
         {label && <label htmlFor={labelId}>{label}</label>}
         <div className={cn("flex items-center p-2 gap-3 border", className)}>
           {startAdornment && <span>{startAdornment}</span>}

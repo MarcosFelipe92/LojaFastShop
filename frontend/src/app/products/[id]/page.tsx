@@ -1,11 +1,9 @@
 import { getProduct } from "@/actions/product/productService";
-import { auth } from "@/auth";
 import { Container } from "@/components/global/container";
 import { Header } from "@/components/global/header";
-import { AddCartItemButton } from "@/components/products/product-details/AddCartItemButton";
-import { BuyButton } from "@/components/products/product-details/BuyButton";
 import ContentInfo from "@/components/products/product-details/ContentInfo";
 import HeaderInfo from "@/components/products/product-details/headerInfo";
+import { ProductDetailsActions } from "@/components/products/product-details/ProductDetailsActions";
 import Image from "next/image";
 
 export default async function ProductDetails({
@@ -37,8 +35,7 @@ export default async function ProductDetails({
             description={product.description}
             price={product.price}
           />
-          <AddCartItemButton productId={product.id} />
-          <BuyButton />
+          <ProductDetailsActions productId={product.id} />
         </div>
       </div>
     </Container>

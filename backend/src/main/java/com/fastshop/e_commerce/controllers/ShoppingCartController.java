@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.fastshop.e_commerce.dtos.itemCart.ItemCartDTO;
+import com.fastshop.e_commerce.dtos.itemCart.ResponseItemCartDTO;
 import com.fastshop.e_commerce.dtos.shoppingCart.ShoppingCartDTO;
 import com.fastshop.e_commerce.services.ShoppingCartService;
 
@@ -30,20 +31,20 @@ public class ShoppingCartController {
     }
 
     @PostMapping
-    public ResponseEntity<String> addItemToShoppingCart(
+    public ResponseEntity<ResponseItemCartDTO> addItemToShoppingCart(
             @PathVariable Long accountId,
             @RequestBody ItemCartDTO itemCartDTO, JwtAuthenticationToken token) {
         service.addItemToCart(accountId, itemCartDTO, token);
 
-        return ResponseEntity.status(200).body("Item added successfully");
+        return ResponseEntity.status(200).body(new ResponseItemCartDTO("Item adicionado com sucesso!"));
     }
 
     @DeleteMapping("/{itemId}")
-    public ResponseEntity<String> addItemToShoppingCart(
+    public ResponseEntity<ResponseItemCartDTO> removeItemToShoppingCart(
             @PathVariable Long accountId,
             @PathVariable Long itemId,
             JwtAuthenticationToken token) {
         service.removeItemToCart(accountId, itemId, token);
-        return ResponseEntity.status(200).body("Item removed successfully");
+        return ResponseEntity.status(200).body(new ResponseItemCartDTO("Item removido com sucesso!"));
     }
 }

@@ -37,24 +37,26 @@ public class ShoppingCartService {
     }
 
     @Transactional
-    public void addItemToCart(Long accountId, ItemCartDTO dto,
-            JwtAuthenticationToken token) {
+    public void addItemToCart(Long accountId, ItemCartDTO dto, JwtAuthenticationToken token) {
         AccountDTO account = accountService.findById(accountId, token);
+
         if (authService.validateUserPermission(token, account.getUserId())) {
+
             ProductDTO product = productService.findById(dto.getProduct().getId());
 
             if (product == null) {
-                throw new NotFoundException("Product not found");
+                throw new NotFoundException("Produto não encontrado");
             }
 
             ShoppingCartBO shoppingCart = repository.findById(account.getShoppingCart().getId())
-                    .orElseThrow(() -> new NotFoundException("ShoppingCart not found"));
+                    .orElseThrow(() -> new NotFoundException("Carrinho de compras não encontrado"));
+
             ItemCartBO itemCart = ItemCartMapper.dtoToEntity(dto, shoppingCart);
             shoppingCart.getItems().add(itemCart);
+
             repository.save(shoppingCart);
         } else {
-            throw new AccessDeniedException(
-                    "You are not allowed to remove an address to an account that does not belong to you.");
+            throw new AccessDeniedException("Você não tem permissão para adicionar itens a este carrinho.");
         }
     }
 

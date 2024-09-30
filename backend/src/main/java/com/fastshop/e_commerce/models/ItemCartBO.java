@@ -31,6 +31,8 @@ public class ItemCartBO {
     @JoinColumn(name = "product_id")
     private ProductBO product;
 
+    private Integer quantity;
+
     @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "shopping_cart_id")

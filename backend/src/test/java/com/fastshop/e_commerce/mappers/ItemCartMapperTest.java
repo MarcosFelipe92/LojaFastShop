@@ -23,6 +23,7 @@ public class ItemCartMapperTest {
     private static final String DESCRIPTION = "Descrição A";
     private static final Double PRICE = 20.0;
     private static final String IMAGE = "imagem";
+    private static final Integer QUANTITY = 1;
 
     @Mock
     private ShoppingCartBO mockShoppingCartBO;
@@ -36,7 +37,7 @@ public class ItemCartMapperTest {
             when(mockShoppingCartBO.getId()).thenReturn(ID);
             ProductDTO productDTO = new ProductDTO(ID, NAME, DESCRIPTION, PRICE, IMAGE);
 
-            ItemCartDTO input = new ItemCartDTO(ID, productDTO, ID);
+            ItemCartDTO input = new ItemCartDTO(ID, productDTO, QUANTITY, ID);
 
             // Act
             ItemCartBO output = ItemCartMapper.dtoToEntity(input, mockShoppingCartBO);
@@ -62,7 +63,7 @@ public class ItemCartMapperTest {
 
             ProductBO productBO = new ProductBO(ID, NAME, DESCRIPTION, PRICE, IMAGE);
 
-            ItemCartBO input = new ItemCartBO(ID, productBO, mockShoppingCartBO);
+            ItemCartBO input = new ItemCartBO(ID, productBO, QUANTITY, mockShoppingCartBO);
 
             // Act
             ItemCartDTO output = ItemCartMapper.entityToDto(input);

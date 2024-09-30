@@ -15,6 +15,7 @@ public class ItemCartMapper {
         entity.setId(dto.getId());
         entity.setProduct(ProductMapper.dtoToEntity(dto.getProduct()));
         entity.setShoppingCart(shoppingCartBO);
+        entity.setQuantity(dto.getQuantity());
         return entity;
     }
 
@@ -22,8 +23,9 @@ public class ItemCartMapper {
         Long id = entity.getId();
         ProductDTO product = ProductMapper.entityToDto(entity.getProduct());
         Long shoppingCartId = entity.getShoppingCart().getId();
+        Integer quantity = entity.getQuantity();
 
-        return new ItemCartDTO(id, product, shoppingCartId);
+        return new ItemCartDTO(id, product, quantity, shoppingCartId);
     }
 
 }
