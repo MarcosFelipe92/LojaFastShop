@@ -1,21 +1,39 @@
-import { getAllProducts } from "@/actions/product/productService";
+"use client";
+
+import { getAllProducts, Product } from "@/actions/product/productService";
 import { Container } from "@/components/global/container";
 import { Header } from "@/components/global/header";
+import { HeaderSearchBar } from "@/components/global/header/headerSearchBar";
 import { CardProduct } from "@/components/products/card-product";
+import { useState, useEffect } from "react";
 
-async function getData() {
-  const products = await getAllProducts();
-  return products;
-}
+export default function Home() {
+  const [products, setProducts] = useState<Product[]>([]);
+  const [filteredProducts, setFilteredProducts] = useState<Product[]>([]);
 
-export default async function Home() {
-  const products = await getData();
+  useEffect(() => {
+    const fetchProducts = async () => {
+      const allProducts = await getAllProducts();
+
+      setProducts(allProducts);
+      setFilteredProducts(allProducts);
+    };
+    fetchProducts();
+  }, []);
+
+  const handleSearch = (query: string) => {
+    const filtered = products.filter((product) =>
+      product.name.toLowerCase().includes(query.toLowerCase())
+    );
+    setFilteredProducts(filtered);
+  };
 
   return (
     <Container>
       <Header />
+      <HeaderSearchBar onSearch={handleSearch} />
       <div className="flex flex-wrap justify-center gap-8 mt-5">
-        {products.map((product) => (
+        {filteredProducts.map((product) => (
           <CardProduct.Root key={product.id}>
             <CardProduct.Image
               src={`data:image/jpeg;base64,${product.image}`}

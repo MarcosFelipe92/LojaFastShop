@@ -1,16 +1,61 @@
-import { IoIosSearch } from "react-icons/io";
-import { Input } from "@/components/global/input";
+"use client";
 
-export function HeaderSearchBar() {
+import { Input } from "@/components/global/input";
+import { Button } from "@/components/ui/button";
+import { Form, FormControl, FormField, FormItem } from "@/components/ui/form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+
+type HeaderSearchBarProps = {
+  onSearch: (query: string) => void;
+};
+
+export function HeaderSearchBar({ onSearch }: HeaderSearchBarProps) {
+  const searchSchema = z.object({
+    name: z.string(),
+  });
+
+  const form = useForm<z.infer<typeof searchSchema>>({
+    resolver: zodResolver(searchSchema),
+    mode: "all",
+    defaultValues: {
+      name: "",
+    },
+  });
+
+  const onSubmit = (values: z.infer<typeof searchSchema>) => {
+    // Chama a função passada pelo componente pai
+    onSearch(values.name);
+  };
+
   return (
-    <form className="w-full md:w-auto">
-      {" "}
-      {/* Largura 100% em telas pequenas */}
-      <Input
-        startAdornment={<IoIosSearch />}
-        placeholder="Pesquisar"
-        className="border-lime-300 rounded-lg focus-within:border-lime-500 focus-within:outline focus-within:outline-2 focus-within:outline-lime-500"
-      />
-    </form>
+    <Form {...form}>
+      <form
+        onSubmit={form.handleSubmit(onSubmit)}
+        className="flex gap-2 w-full items-center max-w-4xl"
+      >
+        <FormField
+          control={form.control}
+          name="name"
+          render={({ field }) => (
+            <FormItem className="flex-1">
+              <FormControl>
+                <Input
+                  {...field}
+                  placeholder="Pesquisar"
+                  type="search"
+                  className="rounded-lg"
+                />
+              </FormControl>
+            </FormItem>
+          )}
+        />
+
+        <Button type="submit" className="text-xl" variant="lime">
+          Pesquisar
+        </Button>
+      </form>
+    </Form>
   );
 }

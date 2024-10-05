@@ -56,3 +56,5 @@ export const addItemCart = async (
     };
   }
 };
+
+export const getAllItems = () => {};

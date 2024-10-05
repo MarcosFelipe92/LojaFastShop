@@ -1,11 +1,13 @@
-import { auth } from "@/auth";
+"use client";
+
 import { NavbarActions } from "@/components/global/navbar/navbarActions";
 import { NavbarItemProps } from "@/components/global/navbar/navbarItem";
 import { NavbarList } from "@/components/global/navbar/navbarList";
+import { useSession } from "next-auth/react";
 import { NavbarRoot } from "./navbarRoot";
 
-export async function Navbar() {
-  const session = await auth();
+export function Navbar() {
+  const { data: session } = useSession();
 
   const navItemsLeft: NavbarItemProps[] = [
     { href: "/categories", label: "Categorias" },

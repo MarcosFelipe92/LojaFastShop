@@ -3,6 +3,7 @@
 import { addItemCart } from "@/actions/shopping-cart/ShoppingCartService";
 import { Input } from "@/components/global/input";
 import { Button } from "@/components/ui/button";
+import { useRouter } from "next/navigation";
 
 import { useState, useTransition } from "react";
 import { ToastContainer, toast } from "react-toastify";
@@ -17,6 +18,7 @@ export function ProductDetailsActions({
 }: ProductDetailsActionsProps) {
   const [isPending, startTransition] = useTransition();
   const [quantity, setQuantity] = useState(1);
+  const router = useRouter();
 
   const handleAddItem = (productId: number, quantity: number) => {
     startTransition(async () => {
@@ -24,6 +26,9 @@ export function ProductDetailsActions({
 
       const response = await addItemCart(productId, quantity);
       if (response?.error) {
+        if (response?.error == "Usuário não autenticado!") {
+          router.push("/auth/login");
+        }
         toast.error(response.error);
       } else {
         toast.success("Item adicionado ao carrinho com sucesso!");
