@@ -37,8 +37,8 @@ Content-Disposition: form-data; name="dto"
 Content-Type: application/json
 
 {
-  "name": "Pc Gamer",
-  "description": "Descrição do notebook",
+  "name": "Pc Gamer, 8Gb de ram, Processador Ryzen 7 5700, Sdd 512Gb",
+  "description": "Descrição do notebook, Descrição do notebook, Descrição do notebook, Descrição do notebook, Descrição do notebook, Descrição do notebook",
   "price": "2000"
 }
 

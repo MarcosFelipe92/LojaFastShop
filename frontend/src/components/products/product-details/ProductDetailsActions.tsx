@@ -25,7 +25,7 @@ export function ProductDetailsActions({
       console.log(quantity);
 
       const response = await addItemCart(productId, quantity);
-      if (response?.error) {
+      if (!response.success) {
         if (response?.error == "Usuário não autenticado!") {
           router.push("/auth/login");
         }

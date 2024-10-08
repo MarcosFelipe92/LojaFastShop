@@ -8,24 +8,27 @@ import { CardProduct } from "@/components/products/card-product";
 import { useState, useEffect } from "react";
 
 export default function Home() {
-  const [products, setProducts] = useState<Product[]>([]);
+  const [allProducts, setAllProducts] = useState<Product[]>([]);
   const [filteredProducts, setFilteredProducts] = useState<Product[]>([]);
 
   useEffect(() => {
     const fetchProducts = async () => {
-      const allProducts = await getAllProducts();
-
-      setProducts(allProducts);
-      setFilteredProducts(allProducts);
+      const products = await getAllProducts();
+      setAllProducts(products);
+      setFilteredProducts(products);
     };
     fetchProducts();
   }, []);
 
   const handleSearch = (query: string) => {
-    const filtered = products.filter((product) =>
-      product.name.toLowerCase().includes(query.toLowerCase())
-    );
-    setFilteredProducts(filtered);
+    if (query === "") {
+      setFilteredProducts(allProducts);
+    } else {
+      const filtered = allProducts.filter((product) =>
+        product.name.toLowerCase().includes(query.toLowerCase())
+      );
+      setFilteredProducts(filtered);
+    }
   };
 
   return (

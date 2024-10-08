@@ -25,7 +25,6 @@ export function HeaderSearchBar({ onSearch }: HeaderSearchBarProps) {
   });
 
   const onSubmit = (values: z.infer<typeof searchSchema>) => {
-    // Chama a função passada pelo componente pai
     onSearch(values.name);
   };
 
