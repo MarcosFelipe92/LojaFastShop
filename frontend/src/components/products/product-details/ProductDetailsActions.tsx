@@ -22,8 +22,6 @@ export function ProductDetailsActions({
 
   const handleAddItem = (productId: number, quantity: number) => {
     startTransition(async () => {
-      console.log(quantity);
-
       const response = await addItemCart(productId, quantity);
       if (!response.success) {
         if (response?.error == "Usuário não autenticado!") {

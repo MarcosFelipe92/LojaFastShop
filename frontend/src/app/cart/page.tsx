@@ -4,11 +4,12 @@ import {
   ApiResponse,
   getAllItems,
   Item,
+  removeItemCart,
 } from "@/actions/shopping-cart/ShoppingCartService";
+import { CartItem } from "@/components/cart/cart-item";
 import { Container } from "@/components/global/container";
 import { Header } from "@/components/global/header";
 import { Button } from "@/components/ui/button";
-import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
@@ -31,34 +32,49 @@ export default function PageCart() {
     fetchItems();
   }, [router]);
 
+  const getTotalPrice = () => {
+    return items.reduce(
+      (acc, item) => acc + item.product?.price * item.quantity,
+      0
+    );
+  };
+
+  const removeItem = async (id: number) => {
+    const response = await removeItemCart(id);
+    console.log(response.success);
+
+    if (response.success) {
+      setItems(items.filter((item) => item.id !== id));
+    }
+  };
+
   return (
     <Container>
       <Header />
-      <div className="flex flex-col justify-center items-center w-full gap-8 mt-5 bg-slate-100 p-4">
+      <div className="flex flex-col justify-center items-center w-full gap-4 mt-5 ">
         <h1 className="text-2xl font-bold">Carrinho de compras</h1>
-        {items.map((item) => (
-          <div key={item.id} className="flex w-full gap-4">
-            <Image
-              width={100}
-              height={100}
-              src={`data:image/jpeg;base64,${item?.product.image}`}
-              alt="Produto"
+        {items.length === 0 ? (
+          <p>Seu carrinho está vazio.</p>
+        ) : (
+          items.map((item) => (
+            <CartItem
+              key={item.id}
+              item={item}
+              onDelete={() => removeItem(item.id)}
             />
-            <div>
-              <p className="font-bold">{item.product?.name}</p>
-              <p>Quantidade: {item.quantity}</p>
-              <div className="flex gap-2 items-center">
-                <p>
-                  Subtotal:{" "}
-                  <span className="text-lime-500 font-bold">
-                    R$ {item.product?.price * item.quantity}
-                  </span>
-                </p>
-                <Button variant="outline">Excluir</Button>
-              </div>
-            </div>
+          ))
+        )}
+        {items.length > 0 && (
+          <div className="w-full flex flex-col justify-center items-center gap-2">
+            <p className="font-bold text-2xl">
+              Total ({items.length} Produtos):{" "}
+              <span className="text-lime-500">R$ {getTotalPrice()}</span>
+            </p>
+            <Button variant="lime" className="w-full">
+              Fechar pedido
+            </Button>
           </div>
-        ))}
+        )}
       </div>
     </Container>
   );

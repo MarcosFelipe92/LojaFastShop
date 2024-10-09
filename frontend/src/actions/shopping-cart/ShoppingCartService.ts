@@ -59,7 +59,49 @@ export const addItemCart = async (
     }
 
     const responseData = await response.json();
-    return responseData;
+    return { success: true, data: responseData };
+  } catch (error: any) {
+    console.error(
+      "Erro ao adicionar item ao carrinho:",
+      error.message || error
+    );
+    return {
+      success: false,
+      error: "Falha ao adicionar item. Por favor, tente novamente mais tarde.",
+    };
+  }
+};
+
+export const removeItemCart = async (
+  id: number
+): Promise<ApiResponse<Response>> => {
+  try {
+    const session = await auth();
+
+    const { accountId, token } = session?.user;
+
+    const response = await fetch(
+      `http://localhost:8080/accounts/${accountId}/shopping-cart/${id}`,
+      {
+        cache: "no-cache",
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
+    if (!response.ok) {
+      const errorMessage = await response.text();
+      console.error(
+        `Erro ao adicionar item ao carrinho: ${response.status} - ${errorMessage}`
+      );
+      throw new Error(`Erro ${response.status}: ${errorMessage}`);
+    }
+
+    const responseData = await response.json();
+    return { success: true, data: responseData };
   } catch (error: any) {
     console.error(
       "Erro ao adicionar item ao carrinho:",
