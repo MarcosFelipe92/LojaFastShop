@@ -5,6 +5,7 @@ import { NavbarItemProps } from "@/components/global/navbar/navbarItem";
 import { NavbarList } from "@/components/global/navbar/navbarList";
 import { useSession } from "next-auth/react";
 import { NavbarRoot } from "./navbarRoot";
+import { BsCart } from "react-icons/bs";
 
 export function Navbar() {
   const { data: session } = useSession();
@@ -17,8 +18,8 @@ export function Navbar() {
 
   const navItemsRight: NavbarItemProps[] = [
     { href: "/history", label: "Histórico" },
-    { href: "/cart", label: "Carrinho" },
     { href: "/purchases", label: "Compras" },
+    { href: "/cart", label: <BsCart /> },
   ];
 
   return (

@@ -1,8 +1,9 @@
 import Link from "next/link";
+import { ReactNode } from "react";
 
 export interface NavbarItemProps {
   href: string;
-  label: string;
+  label: string | ReactNode;
 }
 
 export function NavbarItem({ href, label }: NavbarItemProps) {

@@ -145,7 +145,7 @@ export const getAllItems = async (): Promise<ApiResponse<Item[]>> => {
         return {
           success: false,
           error: "Token expirado, redirecionando para login.",
-          redirectToLogin: true, // novo campo
+          redirectToLogin: true,
         };
       }
       return {
