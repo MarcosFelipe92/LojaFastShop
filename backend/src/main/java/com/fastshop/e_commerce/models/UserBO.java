@@ -43,6 +43,7 @@ public class UserBO {
     @Column(unique = true)
     private String email;
     private String password;
+    private String cpf;
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "users_roles", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))

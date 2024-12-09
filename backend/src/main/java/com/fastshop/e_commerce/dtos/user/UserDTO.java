@@ -34,26 +34,33 @@ public class UserDTO {
     @Size(min = 6, message = "Senha deve ter pelo menos 6 caracteres")
     private String password;
 
+    @NotBlank(message = "CPF é obrigatória")
+    @Size(min = 6, message = "Insira um CPF válido")
+    private String cpf;
+
     private AccountDTO account;
     private List<PhoneDTO> phones = new ArrayList<>();
     private Set<RoleDTO> roles = new HashSet<>();
 
-    public UserDTO(Long id, String name, String email, String password, AccountDTO account) {
+    public UserDTO(Long id, String name, String email, String password, String cpf, AccountDTO account) {
         this.id = id;
         this.name = name;
         this.email = email;
         this.password = password;
+        this.cpf = cpf;
         this.account = account;
     }
 
-    public UserDTO(Long id, String name, String email, String password, AccountDTO account, Set<RoleDTO> roles) {
-        this(id, name, email, password, account);
+    public UserDTO(Long id, String name, String email, String password, String cpf, AccountDTO account,
+            Set<RoleDTO> roles) {
+        this(id, name, email, password, cpf, account);
         this.roles.addAll(roles);
     }
 
-    public UserDTO(Long id, String name, String email, String password, AccountDTO account, Set<RoleDTO> roles,
+    public UserDTO(Long id, String name, String email, String password, String cpf, AccountDTO account,
+            Set<RoleDTO> roles,
             List<PhoneDTO> phones) {
-        this(id, name, email, password, account, roles);
+        this(id, name, email, password, cpf, account, roles);
         this.phones.addAll(phones);
     }
 

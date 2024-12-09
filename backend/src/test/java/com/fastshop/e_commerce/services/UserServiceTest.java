@@ -48,6 +48,7 @@ public class UserServiceTest {
     private static final String EMAIL = "example@example.com";
     private static final String NAME = "Test";
     private static final String PASSWORD = "123456";
+    private static final String CPF = "11122233344";
     private static final String ENCODED_PASSWORD = "encodedPassword";
     private static final String ROLE_NAME = "BASIC";
 
@@ -183,6 +184,7 @@ public class UserServiceTest {
             // Arrange
             when(mockUserBO.getAccount()).thenReturn(mockAccountBO);
             when(mockUserBO.getEmail()).thenReturn(EMAIL);
+            when(mockUserBO.getCpf()).thenReturn(CPF);
             when(mockUserBO.getRoles()).thenReturn(Set.of(mockRoleBO));
 
             setupMockAccount();
@@ -259,7 +261,7 @@ public class UserServiceTest {
             // Arrange
             when(userRepository.findByEmail(EMAIL)).thenReturn(Optional.of(mockUserBO));
 
-            UserDTO input = new UserDTO(ID, NAME, EMAIL, PASSWORD, new AccountDTO(),
+            UserDTO input = new UserDTO(ID, NAME, EMAIL, PASSWORD, CPF, new AccountDTO(),
                     Set.of(mockRoleDTO), List.of(mockPhoneDTO));
 
             // Act and Assert
@@ -277,7 +279,7 @@ public class UserServiceTest {
         void shouldUpdateAndReturnUserWhenUserHasPermission() {
             ArrayList<PhoneBO> phones = new ArrayList<>();
             phones.add(mockPhoneBO);
-            UserBO realUserBO = new UserBO(ID, NAME, EMAIL, PASSWORD, Set.of(mockRoleBO), mockAccountBO, phones);
+            UserBO realUserBO = new UserBO(ID, NAME, EMAIL, PASSWORD, CPF, Set.of(mockRoleBO), mockAccountBO, phones);
 
             setupMockAccount();
             setupMockShoppingCart();
@@ -309,7 +311,7 @@ public class UserServiceTest {
             // Arrange
             when(userRepository.findById(ID)).thenReturn(Optional.empty());
 
-            UserDTO input = new UserDTO(ID, NAME, EMAIL, PASSWORD, new AccountDTO(),
+            UserDTO input = new UserDTO(ID, NAME, EMAIL, PASSWORD, CPF, new AccountDTO(),
                     Set.of(mockRoleDTO), List.of(mockPhoneDTO));
 
             // Act and Assert
@@ -325,7 +327,7 @@ public class UserServiceTest {
             when(userRepository.findById(ID)).thenReturn(Optional.of(mockUserBO));
             when(authService.validateUserPermission(mockToken, ID)).thenReturn(false);
 
-            UserDTO input = new UserDTO(ID, NAME, EMAIL, PASSWORD, new AccountDTO(),
+            UserDTO input = new UserDTO(ID, NAME, EMAIL, PASSWORD, CPF, new AccountDTO(),
                     Set.of(mockRoleDTO), List.of(mockPhoneDTO));
 
             // Act and Assert
@@ -383,6 +385,7 @@ public class UserServiceTest {
         when(mockUserBO.getName()).thenReturn(NAME);
         when(mockUserBO.getEmail()).thenReturn(EMAIL);
         when(mockUserBO.getPassword()).thenReturn(PASSWORD);
+        when(mockUserBO.getCpf()).thenReturn(CPF);
         when(mockUserBO.getAccount()).thenReturn(mockAccountBO);
 
         when(mockUserBO.getPhones()).thenReturn(List.of(mockPhoneBO));

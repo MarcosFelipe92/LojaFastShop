@@ -51,9 +51,10 @@ Authorization: Bearer {{authToken}}
 Content-Type: application/json
 
 {
-  "name": "marcos",
+  "name": "Marcos Felipe Amorim",
   "email": "marcos@example.com",
   "password": "123456",
+  "cpf": "11122233344",
   "phones": [
     {
       "number": "988776655",

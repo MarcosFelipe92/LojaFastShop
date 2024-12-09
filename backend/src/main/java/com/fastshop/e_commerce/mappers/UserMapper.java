@@ -25,6 +25,7 @@ public class UserMapper {
         entity.setName(dto.getName());
         entity.setEmail(dto.getEmail());
         entity.setPassword(dto.getPassword());
+        entity.setCpf(dto.getCpf());
 
         entity.setPhones(dto.getPhones().stream()
                 .map(item -> PhoneMapper.dtoToEntity(item, entity))
@@ -50,9 +51,11 @@ public class UserMapper {
         String name = user.getName();
         String email = user.getEmail();
         String password = user.getPassword();
+        String cpf = user.getCpf();
+
         AccountDTO account = AccountMapper.entityToDto(user.getAccount());
 
-        return new UserDTO(id, name, email, password, account);
+        return new UserDTO(id, name, email, password, cpf, account);
     }
 
     public static UserDTO entityToDto(UserBO user, Set<RoleBO> roles) {
@@ -60,10 +63,11 @@ public class UserMapper {
         String name = user.getName();
         String email = user.getEmail();
         String password = user.getPassword();
+        String cpf = user.getCpf();
         AccountDTO account = AccountMapper.entityToDto(user.getAccount());
         Set<RoleDTO> rolesToAdd = roles.stream().map(RoleMapper::entityToDto).collect(Collectors.toSet());
 
-        return new UserDTO(id, name, email, password, account, rolesToAdd);
+        return new UserDTO(id, name, email, password, cpf, account, rolesToAdd);
     }
 
     public static UserDTO entityToDto(UserBO user, Set<RoleBO> roles, List<PhoneBO> phones) {
@@ -71,16 +75,18 @@ public class UserMapper {
         String name = user.getName();
         String email = user.getEmail();
         String password = user.getPassword();
+        String cpf = user.getCpf();
         AccountDTO account = AccountMapper.entityToDto(user.getAccount());
         Set<RoleDTO> rolesToAdd = roles.stream().map(RoleMapper::entityToDto).collect(Collectors.toSet());
         List<PhoneDTO> phonesToAdd = phones.stream().map(PhoneMapper::entityToDto).collect(Collectors.toList());
 
-        return new UserDTO(id, name, email, password, account, rolesToAdd, phonesToAdd);
+        return new UserDTO(id, name, email, password, cpf, account, rolesToAdd, phonesToAdd);
     }
 
     public static void copyAttributes(UserDTO dto, UserBO entity, AccountBO account) {
         entity.setName(dto.getName());
         entity.setEmail(dto.getEmail());
+        entity.setCpf(dto.getCpf());
         entity.setAccount(account);
 
         List<PhoneBO> updatedPhones = dto.getPhones().stream()

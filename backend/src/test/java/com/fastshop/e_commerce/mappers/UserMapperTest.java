@@ -31,6 +31,7 @@ public class UserMapperTest {
     private static final String NAME = "John Doe";
     private static final String EMAIL = "johndoe@example.com";
     private static final String PASSWORD = "password123";
+    private static final String CPF = "11122233344";
     private static final String TYPE_PHONE = "celular";
     private static final String NUMBER = "988888888";
     private static final String NAME_ROLE = "BASIC";
@@ -59,7 +60,7 @@ public class UserMapperTest {
             PhoneDTO phoneDTO = new PhoneDTO(ID, NUMBER, TYPE_PHONE, ID);
             RoleDTO roleDTO = new RoleDTO(ID, NAME_ROLE);
 
-            UserDTO input = new UserDTO(ID, NAME, EMAIL, PASSWORD, null,
+            UserDTO input = new UserDTO(ID, NAME, EMAIL, PASSWORD, CPF, null,
                     Set.of(roleDTO), List.of(phoneDTO));
 
             // Act
@@ -91,6 +92,7 @@ public class UserMapperTest {
             when(mockUserBO.getName()).thenReturn(NAME);
             when(mockUserBO.getEmail()).thenReturn(EMAIL);
             when(mockUserBO.getPassword()).thenReturn(PASSWORD);
+            when(mockUserBO.getCpf()).thenReturn(CPF);
             when(mockUserBO.getAccount()).thenReturn(mockAccountBO);
 
             when(mockAccountBO.getUser()).thenReturn(mockUserBO);
@@ -108,6 +110,7 @@ public class UserMapperTest {
             assertEquals(NAME, output.getName());
             assertEquals(EMAIL, output.getEmail());
             assertEquals(PASSWORD, output.getPassword());
+            assertEquals(CPF, output.getCpf());
             assertEquals(ID, output.getAccount().getId());
         }
 
@@ -127,6 +130,7 @@ public class UserMapperTest {
             assertEquals(NAME, output.getName());
             assertEquals(EMAIL, output.getEmail());
             assertEquals(PASSWORD, output.getPassword());
+            assertEquals(CPF, output.getCpf());
             assertEquals(ID, output.getAccount().getId());
 
             assertEquals(1, output.getRoles().size());
@@ -155,6 +159,7 @@ public class UserMapperTest {
             assertEquals(NAME, output.getName());
             assertEquals(EMAIL, output.getEmail());
             assertEquals(PASSWORD, output.getPassword());
+            assertEquals(CPF, output.getCpf());
             assertEquals(ID, output.getAccount().getId());
 
             assertEquals(1, output.getPhones().size());
@@ -178,6 +183,7 @@ public class UserMapperTest {
             assertEquals(NAME, output.getName());
             assertEquals(EMAIL, output.getEmail());
             assertEquals(PASSWORD, output.getPassword());
+            assertEquals(CPF, output.getCpf());
             assertEquals(ID, output.getAccount().getId());
 
             assertEquals(0, output.getPhones().size());
