@@ -1,4 +1,4 @@
-package com.fastshop.e_commerce.services;
+package com.fastshop.e_commerce.services.account;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -18,13 +18,14 @@ import com.fastshop.e_commerce.mappers.AddressMapper;
 import com.fastshop.e_commerce.models.AccountBO;
 import com.fastshop.e_commerce.models.AddressBO;
 import com.fastshop.e_commerce.repositories.AccountRepository;
+import com.fastshop.e_commerce.services.address.AddressService;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 @Service
-public class AccountService {
+public class AccountServiceImpl implements AccountService {
 
     private final AccountRepository repository;
     private final AddressService addressService;

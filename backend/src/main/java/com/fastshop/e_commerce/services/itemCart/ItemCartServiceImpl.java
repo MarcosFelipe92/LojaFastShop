@@ -1,4 +1,4 @@
-package com.fastshop.e_commerce.services;
+package com.fastshop.e_commerce.services.itemCart;
 
 import org.springframework.stereotype.Service;
 
@@ -9,7 +9,7 @@ import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 @Service
-public class ItemCartService {
+public class ItemCartServiceImpl implements ItemCartService {
 
     private final ItemCartRepository repository;
 

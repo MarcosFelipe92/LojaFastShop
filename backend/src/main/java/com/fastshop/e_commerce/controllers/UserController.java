@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.fastshop.e_commerce.dtos.user.UserDTO;
 import com.fastshop.e_commerce.dtos.user.UserSummaryDTO;
-import com.fastshop.e_commerce.services.UserService;
+import com.fastshop.e_commerce.services.user.UserService;
 
 import jakarta.validation.Valid;
 

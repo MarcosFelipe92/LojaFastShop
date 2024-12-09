@@ -1,4 +1,4 @@
-package com.fastshop.e_commerce.services;
+package com.fastshop.e_commerce.services.product;
 
 import java.io.IOException;
 import java.util.Base64;
@@ -21,7 +21,7 @@ import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 @Service
-public class ProductService {
+public class ProductServiceImpl implements ProductService {
 
     private final ProductRepository repository;
     private final AuthService authService;
@@ -82,7 +82,7 @@ public class ProductService {
         }
     }
 
-    public String toBase64(MultipartFile image) throws IOException {
+    private String toBase64(MultipartFile image) throws IOException {
         byte[] imageBytes = image.getBytes();
         String base64Image = Base64.getEncoder().encodeToString(imageBytes);
         return base64Image;

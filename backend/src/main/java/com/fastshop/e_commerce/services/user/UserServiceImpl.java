@@ -1,4 +1,4 @@
-package com.fastshop.e_commerce.services;
+package com.fastshop.e_commerce.services.user;
 
 import java.util.List;
 import java.util.Set;
@@ -20,13 +20,14 @@ import com.fastshop.e_commerce.models.RoleBO;
 import com.fastshop.e_commerce.models.ShoppingCartBO;
 import com.fastshop.e_commerce.models.UserBO;
 import com.fastshop.e_commerce.repositories.UserRepository;
+import com.fastshop.e_commerce.services.role.RoleService;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
-public class UserService {
+public class UserServiceImpl implements UserService {
 
     private final UserRepository repository;
     private final RoleService roleService;

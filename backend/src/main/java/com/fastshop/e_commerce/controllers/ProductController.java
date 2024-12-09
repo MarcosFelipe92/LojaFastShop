@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.fastshop.e_commerce.dtos.product.ProductDTO;
-import com.fastshop.e_commerce.services.ProductService;
+import com.fastshop.e_commerce.services.product.ProductService;
 
 @RestController
 @RequestMapping("/products")

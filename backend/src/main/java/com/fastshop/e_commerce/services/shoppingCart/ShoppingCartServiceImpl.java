@@ -1,4 +1,4 @@
-package com.fastshop.e_commerce.services;
+package com.fastshop.e_commerce.services.shoppingCart;
 
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
@@ -15,13 +15,16 @@ import com.fastshop.e_commerce.mappers.ShoppingCartMapper;
 import com.fastshop.e_commerce.models.ItemCartBO;
 import com.fastshop.e_commerce.models.ShoppingCartBO;
 import com.fastshop.e_commerce.repositories.ShoppingCartRepository;
+import com.fastshop.e_commerce.services.account.AccountService;
+import com.fastshop.e_commerce.services.itemCart.ItemCartService;
+import com.fastshop.e_commerce.services.product.ProductService;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 @Service
-public class ShoppingCartService {
+public class ShoppingCartServiceImpl implements ShoppingCartService {
 
     private final ShoppingCartRepository repository;
     private final AccountService accountService;

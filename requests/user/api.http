@@ -5,7 +5,7 @@ POST {{baseUrl}}/token/login
 Content-Type: application/json
 
 {
-  "email": "marcos@example.com",
+  "email": "admin@example.com",
   "password": "123456"
 }
 
@@ -32,9 +32,10 @@ POST {{baseUrl}}/users/register
 Content-Type: application/json
 
 {
-  "name": "admin",
-  "email": "admin@example.com",
+  "name": "teste",
+  "email": "teste@example.com",
   "password": "123456",
+  "cpf": "11122233344",
   "phones": [
     {
       "number": "988776655",
@@ -46,13 +47,13 @@ Content-Type: application/json
 ###
 
 # @name update
-PUT {{baseUrl}}/users/1
+PUT {{baseUrl}}/users/3
 Authorization: Bearer {{authToken}}
 Content-Type: application/json
 
 {
   "name": "Marcos Felipe Amorim",
-  "email": "marcos@example.com",
+  "email": "teste@example.com",
   "password": "123456",
   "cpf": "11122233344",
   "phones": [
@@ -66,6 +67,6 @@ Content-Type: application/json
 ###
 
 # @name delete
-DELETE {{baseUrl}}users/1
+DELETE {{baseUrl}}/users/3
 Authorization: Bearer {{authToken}}
 Content-Type: application/json

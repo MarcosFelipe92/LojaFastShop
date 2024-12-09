@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.fastshop.e_commerce.dtos.itemCart.ItemCartDTO;
 import com.fastshop.e_commerce.dtos.itemCart.ResponseItemCartDTO;
 import com.fastshop.e_commerce.dtos.shoppingCart.ShoppingCartDTO;
-import com.fastshop.e_commerce.services.ShoppingCartService;
+import com.fastshop.e_commerce.services.shoppingCart.ShoppingCartService;
 
 @RestController
 @RequestMapping("accounts/{accountId}/shopping-cart")

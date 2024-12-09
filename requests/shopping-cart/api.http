@@ -34,7 +34,7 @@ Content-Type: application/json
 ###
 
 # @name removeItemcart
-DELETE {{baseUrl}}/accounts/1/shopping-cart/2
+DELETE {{baseUrl}}/accounts/1/shopping-cart/31
 Authorization: Bearer {{authToken}}
 Content-Type: application/json
 

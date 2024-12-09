@@ -1,4 +1,4 @@
-package com.fastshop.e_commerce.services;
+package com.fastshop.e_commerce.services.role;
 
 import java.util.List;
 
@@ -10,7 +10,7 @@ import com.fastshop.e_commerce.models.RoleBO;
 import com.fastshop.e_commerce.repositories.RoleRepository;
 
 @Service
-public class RoleService {
+public class RoleServiceImpl implements RoleService {
 
     @Autowired
     private RoleRepository repository;

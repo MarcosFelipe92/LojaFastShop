@@ -40,6 +40,8 @@ import com.fastshop.e_commerce.models.RoleBO;
 import com.fastshop.e_commerce.models.ShoppingCartBO;
 import com.fastshop.e_commerce.models.UserBO;
 import com.fastshop.e_commerce.repositories.UserRepository;
+import com.fastshop.e_commerce.services.role.RoleService;
+import com.fastshop.e_commerce.services.user.UserServiceImpl;
 
 @ExtendWith(MockitoExtension.class)
 public class UserServiceTest {
@@ -59,7 +61,7 @@ public class UserServiceTest {
     private static final String EXCEPTION_MESSAGE_DELETE = "You are not allowed to delete to an user that does not you.";
 
     @InjectMocks
-    private UserService userService;
+    private UserServiceImpl userService;
 
     @Mock
     private UserRepository userRepository;

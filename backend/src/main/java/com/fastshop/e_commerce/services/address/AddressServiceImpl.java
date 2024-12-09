@@ -1,4 +1,4 @@
-package com.fastshop.e_commerce.services;
+package com.fastshop.e_commerce.services.address;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -16,7 +16,7 @@ import com.fastshop.e_commerce.repositories.AddressRepository;
 import jakarta.transaction.Transactional;
 
 @Service
-public class AddressService {
+public class AddressServiceImpl implements AddressService {
     @Autowired
     private AddressRepository repository;
 
