@@ -61,7 +61,6 @@ public class ShoppingCartMapperTest {
 
             assertEquals(input.getItems().size(), output.getItems().size());
             assertEquals(input.getItems().get(0).getId(), output.getItems().get(0).getId());
-
         }
 
     }
@@ -74,7 +73,7 @@ public class ShoppingCartMapperTest {
             // Arrange
             when(mockAccountBO.getId()).thenReturn(ID);
 
-            ShoppingCartBO input = new ShoppingCartBO(ID, mockAccountBO, List.of(mockItemCartBO));
+            ShoppingCartBO input = new ShoppingCartBO(ID, mockAccountBO, null);
 
             // Act
             ShoppingCartDTO output = ShoppingCartMapper.entityToDto(input);
@@ -82,7 +81,6 @@ public class ShoppingCartMapperTest {
             // Assert
             assertEquals(ID, output.getId());
             assertEquals(input.getAccount().getId(), output.getAccountId());
-
         }
 
         @Test
@@ -106,8 +104,6 @@ public class ShoppingCartMapperTest {
 
             assertEquals(input.getItems().size(), output.getItems().size());
             assertEquals(input.getItems().get(0).getId(), output.getItems().get(0).getId());
-
         }
-
     }
 }
