@@ -78,4 +78,8 @@ public class AuthService {
         return false;
     }
 
+    public Long getUserId(JwtAuthenticationToken token) {
+        return Long.parseLong(token.getName());
+    }
+
 }
