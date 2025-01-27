@@ -10,16 +10,24 @@ import org.springframework.stereotype.Service;
 import com.fastshop.e_commerce.auth.AuthService;
 import com.fastshop.e_commerce.dtos.address.AddressDTO;
 import com.fastshop.e_commerce.dtos.order.OrderDTO;
+import com.fastshop.e_commerce.dtos.payment.PaymentDTO;
 import com.fastshop.e_commerce.dtos.user.UserDTO;
 import com.fastshop.e_commerce.enuns.OrderStatus;
 import com.fastshop.e_commerce.exceptions.common.NotFoundException;
+import com.fastshop.e_commerce.mappers.AccountMapper;
 import com.fastshop.e_commerce.mappers.AddressMapper;
 import com.fastshop.e_commerce.mappers.OrderMapper;
+import com.fastshop.e_commerce.mappers.ShoppingCartMapper;
 import com.fastshop.e_commerce.mappers.UserMapper;
+import com.fastshop.e_commerce.models.AccountBO;
 import com.fastshop.e_commerce.models.AddressBO;
 import com.fastshop.e_commerce.models.OrderBO;
+import com.fastshop.e_commerce.models.ShoppingCartBO;
 import com.fastshop.e_commerce.models.UserBO;
 import com.fastshop.e_commerce.repositories.OrderRepository;
+import com.fastshop.e_commerce.services.address.AddressService;
+import com.fastshop.e_commerce.services.payment.PaymentService;
+import com.fastshop.e_commerce.services.shoppingCart.ShoppingCartService;
 import com.fastshop.e_commerce.services.user.UserService;
 
 import jakarta.transaction.Transactional;
@@ -31,6 +39,9 @@ public class OrderServiceImpl implements OrderService {
     private final OrderRepository repository;
     private final AuthService authService;
     private final UserService userService;
+    private final ShoppingCartService shoppingCartService;
+    private final AddressService addressService;
+    private final PaymentService paymentService;
 
     public List<OrderDTO> findAll(JwtAuthenticationToken token) {
         Long userId = authService.getUserId(token);
@@ -50,17 +61,33 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Transactional
-    public OrderDTO create(OrderDTO dto, AddressDTO addressDto, JwtAuthenticationToken token) {
+    public OrderDTO create(OrderDTO dto, JwtAuthenticationToken token) {
         UserDTO userDTO = userService.findById(authService.getUserId(token), token);
         UserBO user = UserMapper.dtoToEntity(userDTO);
-        AddressBO address = AddressMapper.dtoToEntity(addressDto, user.getAccount());
+        AddressDTO addressDTO = addressService.findById(dto.getDeliveryAddressId());
+        ShoppingCartBO cart = ShoppingCartMapper
+                .dtoToEntity(shoppingCartService.findById(userDTO.getAccount().getShoppingCart().getId(), token), null);
 
-        OrderBO order = OrderMapper.dtoToEntity(dto, user.getAccount(), address);
-        order.setStatus(OrderStatus.PENDING);
+        AccountBO account = AccountMapper.dtoToEntity(userDTO.getAccount(), user, cart);
+
+        AddressBO address = AddressMapper.dtoToEntity(addressDTO, account);
+
+        OrderBO order = OrderMapper.dtoToEntity(dto, account, address);
+
+        PaymentDTO payment = createPaymentFromOrder(dto);
+
+        PaymentDTO paymentResult = paymentService.pay(payment);
+
+        if (paymentResult != null) {
+            order.setStatus(OrderStatus.APPROVED);
+        }
 
         order = repository.save(order);
 
-        return OrderMapper.entityToDto(order, order.getItems());
+        OrderDTO orderOutput = OrderMapper.entityToDto(order, order.getItems());
+        orderOutput.setPayment(paymentResult);
+
+        return orderOutput;
     }
 
     @Override
@@ -77,5 +104,22 @@ public class OrderServiceImpl implements OrderService {
     private boolean hasAccessToOrder(Long orderOwnerId, JwtAuthenticationToken token) {
         Long userId = authService.getUserId(token);
         return orderOwnerId.equals(userId) || authService.validateUserPermission(token);
+    }
+
+    private PaymentDTO createPaymentFromOrder(OrderDTO orderDTO) {
+        List<PaymentDTO.ItemDTO> items = orderDTO.getItems().stream()
+                .map(item -> new PaymentDTO.ItemDTO(
+                        item.getProduct().getName(),
+                        item.getProduct().getDescription(),
+                        item.getQuantity(),
+                        item.getProduct().getPrice()))
+                .collect(Collectors.toList());
+
+        PaymentDTO.BackUrlsDTO backUrls = new PaymentDTO.BackUrlsDTO(
+                "http://seusite.com/success",
+                "http://seusite.com/failure",
+                "http://seusite.com/pending");
+
+        return new PaymentDTO(items, backUrls, null);
     }
 }

@@ -5,7 +5,7 @@ POST {{baseUrl}}/token/login
 Content-Type: application/json
 
 {
-  "email": "admin@example.com",
+  "email": "marcos@example.com",
   "password": "123456"
 }
 
@@ -21,25 +21,44 @@ Authorization: Bearer {{authToken}}
 ###
 
 # @name findById
-GET {{baseUrl}}/users/1
+GET {{baseUrl}}/orders/1
 Authorization: Bearer {{authToken}}
 Content-Type: application/json
 
 ###
 
 # @name create
-POST {{baseUrl}}/users/register
+POST {{baseUrl}}/orders
+Authorization: Bearer {{authToken}}
 Content-Type: application/json
 
 {
-  "name": "teste",
-  "email": "teste@example.com",
-  "password": "123456",
-  "cpf": "11122233344",
-  "phones": [
+  "totalPrice": 200.00,
+  "discount": 10.00,
+  "paymentMethod": "CREDIT_CARD",
+  "status": "PENDING",
+  "createdAt": "2024-12-17T14:00:00",
+  "updatedAt": "2024-12-17T14:00:00",
+  "accountId": 1,
+  "deliveryAddressId": 1,
+  "items": [
     {
-      "number": "988776655",
-      "type": "Celular"
+      "product": {
+        "id": 1,
+        "name": "Celular",
+        "description": "Descrição do celular",
+        "price": 200.00
+      },
+      "quantity": 1
+    },
+    {
+      "product": {
+        "id": 1,
+        "name": "Notebook",
+        "description": "Descrição do notebook",
+        "price": 2000.00
+      },
+      "quantity": 1
     }
   ]
 }

@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.fastshop.e_commerce.dtos.itemOrder.ItemOrderDTO;
+import com.fastshop.e_commerce.dtos.payment.PaymentDTO;
 import com.fastshop.e_commerce.enuns.OrderStatus;
 import com.fastshop.e_commerce.enuns.PaymentMethod;
 
@@ -15,6 +16,7 @@ import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.PositiveOrZero;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import lombok.ToString;
 
 @ToString
@@ -53,6 +55,9 @@ public class OrderDTO {
     @Valid
     private List<@Valid ItemOrderDTO> items = new ArrayList<>();
 
+    @Setter
+    private PaymentDTO payment;
+
     public OrderDTO(Long id, Double totalPrice, Double discount, PaymentMethod paymentMethod, OrderStatus status,
             LocalDateTime createdAt, LocalDateTime updatedAt, Long accountId, Long deliveryAddressId) {
         this.id = id;
@@ -72,4 +77,5 @@ public class OrderDTO {
         this(id, totalPrice, discount, paymentMethod, status, createdAt, updatedAt, accountId, deliveryAddressId);
         this.items.addAll(items);
     }
+
 }

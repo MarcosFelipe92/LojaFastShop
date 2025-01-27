@@ -36,8 +36,8 @@ public class UserController {
 
     @GetMapping("/{id}")
     public ResponseEntity<UserDTO> findById(@PathVariable Long id, JwtAuthenticationToken token) {
-        UserDTO entity = service.findById(id, token);
-        return ResponseEntity.ok().body(entity);
+        UserDTO obj = service.findById(id, token);
+        return ResponseEntity.ok().body(obj);
     }
 
     @PostMapping("/register")

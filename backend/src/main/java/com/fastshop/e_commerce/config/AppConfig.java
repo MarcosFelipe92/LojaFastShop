@@ -30,7 +30,7 @@ import com.nimbusds.jose.proc.SecurityContext;
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity
-public class SecurityConfig {
+public class AppConfig {
 
     @Value("${jwt.public.key}")
     private RSAPublicKey publicKey;
@@ -77,4 +77,5 @@ public class SecurityConfig {
                     HttpStatus.UNAUTHORIZED.value(), "Invalid or expired token");
         };
     }
+
 }

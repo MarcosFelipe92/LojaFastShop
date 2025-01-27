@@ -12,6 +12,7 @@ public class AddressMapper {
     public static AddressBO dtoToEntity(AddressDTO dto, AccountBO account) {
         AddressBO entity = new AddressBO();
 
+        entity.setId(dto.getId());
         entity.setZipCode(dto.getZipCode());
         entity.setStreet(dto.getStreet());
         entity.setNumber(dto.getNumber());

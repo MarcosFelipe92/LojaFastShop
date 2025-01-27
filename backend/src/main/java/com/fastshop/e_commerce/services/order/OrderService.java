@@ -4,7 +4,6 @@ import java.util.List;
 
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 
-import com.fastshop.e_commerce.dtos.address.AddressDTO;
 import com.fastshop.e_commerce.dtos.order.OrderDTO;
 
 public interface OrderService {
@@ -12,7 +11,7 @@ public interface OrderService {
 
     OrderDTO findById(Long id, JwtAuthenticationToken token);
 
-    OrderDTO create(OrderDTO dto, AddressDTO address, JwtAuthenticationToken token);
+    OrderDTO create(OrderDTO dto, JwtAuthenticationToken token);
 
     void delete(Long id, JwtAuthenticationToken token);
 }
