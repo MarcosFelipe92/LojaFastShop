@@ -35,6 +35,11 @@ Este projeto é uma aplicação de e-commerce desenvolvida com as seguintes tecn
 ### Carrinho de Compras
 - **Gerenciamento de Carrinho**: Cada usuário tem um carrinho de compras associado à sua conta, onde pode adicionar e remover produtos.
 
+### Pedidos e Pagamentos  
+- **Criação de Pedidos**: Endpoint para gerar pedidos a partir do carrinho de compras.  
+- **Integração com Mercado Pago**: O backend processa pagamentos automaticamente via API do Mercado Pago.  
+- **Observação**: Atualmente, essa funcionalidade está implementada apenas no backend.  
+
 ### Roles e Permissões
 - **Gerenciamento de Roles**: As permissões de usuário são gerenciadas por meio de roles (e.g., admin, user).
 - **Validação de Permissões**: Implementação robusta de validações de permissões, garantindo que as operações sejam permitidas apenas para os usuários certos.
